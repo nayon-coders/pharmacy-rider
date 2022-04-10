@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
+import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -63,18 +64,50 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      DashboardBox("1", "Pending", customColor.pendingColor),
+                      Expanded(
+                        flex: 2,
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context)=>const PendingOrders()));
+                            },
+                            child: DashboardBox("20", "Pending", customColor.pendingColor),
+                          )
+                      ),
+
+
                       SizedBox(width: 10,),
-                      DashboardBox("1", "Pending", customColor.processingColor),
+                      Expanded(
+                          flex: 2,
+                          child: InkWell(
+                            onTap: (){},
+                            child: DashboardBox("1", "Processing", customColor.processingColor),
+                          )
+                      ),
+
                     ],
                   ),
                   const SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      DashboardBox("1", "Confirm", customColor.confirmColor),
-                      const SizedBox(width: 10,),
-                      DashboardBox("1", "Cancel", customColor.cancelColor),
+                      Expanded(
+                          flex: 2,
+                          child: InkWell(
+                            onTap: (){},
+                            child: DashboardBox("1", "Confirm", customColor.confirmColor),
+                          )
+                      ),
+
+
+                      SizedBox(width: 10,),
+                      Expanded(
+                          flex: 2,
+                          child: InkWell(
+                            onTap: (){},
+                            child: DashboardBox("1", "Cancle", customColor.cancelColor),
+                          )
+                      ),
                     ],
                   ),
 
@@ -116,21 +149,48 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      DashboardBox("1", "Pending", customColor.pendingColor),
+                      Expanded(
+                          flex: 2,
+                          child: GestureDetector(
+                            onTap: (){},
+                            child: DashboardBox("1", "Pending", customColor.pendingColor),
+                          )
+                      ),
+
+
                       SizedBox(width: 10,),
-                      DashboardBox("1", "Pending", customColor.processingColor),
+                      Expanded(
+                          flex: 2,
+                          child: GestureDetector(
+                            onTap: (){},
+                            child: DashboardBox("1", "Processing", customColor.processingColor),
+                          )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      DashboardBox("1", "Confirm", customColor.confirmColor),
-                      const SizedBox(width: 10,),
-                      DashboardBox("1", "Cancel", customColor.cancelColor),
+                      Expanded(
+                          flex: 2,
+                          child: InkWell(
+                            onTap: (){},
+                            child: DashboardBox("1", "Confirm", customColor.confirmColor),
+                          )
+                      ),
+
+
+                      SizedBox(width: 10,),
+                      Expanded(
+                          flex: 2,
+                          child: InkWell(
+                            onTap: (){},
+                            child: DashboardBox("1", "Cancle", customColor.cancelColor),
+                          )
+                      ),
                     ],
                   ),
-
 
                 ],
               ),
@@ -148,9 +208,7 @@ class DashboardBox extends StatelessWidget {
   DashboardBox(this.Number, this.Value, this.color);
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Material(
+    return Material(
         child: Container(
           padding: const EdgeInsets.only(left: 20, top: 30, right: 20),
           height: 170,
@@ -190,7 +248,6 @@ class DashboardBox extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }
