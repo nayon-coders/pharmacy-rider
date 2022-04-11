@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:pharmacy_rider_apps/Utility/api/api.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
 import '../../Utility/colors.dart';
 class SignIn extends StatefulWidget {
@@ -99,11 +102,16 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
-  void Loginuser(String email, String pass){
-    Map crads = {
+  void Loginuser(String email, String pass)async{
+    var crads = {
       "email" : _email.text,
       "password": _pass.text,
     };
     Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+    var response = await CallApi().postData(crads, "/login");
+    var body = jsonDecode(response.body);
+    print(body.toString());
+
+
   }
 }

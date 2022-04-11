@@ -47,7 +47,7 @@ class OrderList extends StatelessWidget {
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text("Order Id: MAR38 432838493",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
