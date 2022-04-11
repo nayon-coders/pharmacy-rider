@@ -20,9 +20,27 @@ class _PendingOrdersState extends State<PendingOrders> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10,),
-        child: Column(
+        child: ListView(
           children: [
             SizedBox(height: 20,),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
+            OrderList(),
             OrderList(),
             OrderList(),
             OrderList(),
