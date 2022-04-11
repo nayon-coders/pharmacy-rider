@@ -1,16 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
-import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 
-class PendingOrders extends StatefulWidget {
-  const PendingOrders({Key? key}) : super(key: key);
+
+class AccpectOrders extends StatefulWidget {
+  const AccpectOrders({Key? key}) : super(key: key);
 
   @override
-  State<PendingOrders> createState() => _PendingOrdersState();
+  State<AccpectOrders> createState() => _AccpectOrdersState();
 }
 
-class _PendingOrdersState extends State<PendingOrders> {
+class _AccpectOrdersState extends State<AccpectOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,19 +76,25 @@ class OrderList extends StatelessWidget {
                     fontSize: 13,
 
                   ),
+                ),
+                Text("Order Status: Accpect",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: customColor.confirmColor,
+                  ),
                 )
               ],
             ),
             GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>PendingOrderDetails()));
+                    builder: (context)=>AccpectOrders()));
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: customColor.primaryColor,
+                  color: customColor.confirmColor,
                 ),
                 child: Text("Details",
                   style: TextStyle(
@@ -106,4 +111,6 @@ class OrderList extends StatelessWidget {
     );
   }
 }
+
+
 

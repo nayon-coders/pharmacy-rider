@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:pharmacy_rider_apps/Utility/api/api.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
+
 import '../../Utility/colors.dart';
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -15,9 +15,26 @@ class _SignInState extends State<SignIn> {
   //controller
   TextEditingController _email = TextEditingController();
   TextEditingController _pass = TextEditingController();
+
   //global form key
   final GlobalKey<FormState> _loginuser = GlobalKey<FormState>();
 
+  //is login
+  bool _isLogin = false;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  _showMsg(msg) {
+    final snackBar = SnackBar(
+      content: Text(msg),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {
+          // Some code to undo the change!
+        },
+      ),
+    );
+    _scaffoldKey.currentState?.showSnackBar(snackBar);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +57,13 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
 
-               const SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 TextFormField(
                   controller: _email,
                   decoration: InputDecoration(
                       hintText: "Email",
                       prefixIcon: Icon(Icons.email),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(width: 1, color: Colors.grey),
                       ),
                       border: OutlineInputBorder(
@@ -60,7 +77,7 @@ class _SignInState extends State<SignIn> {
                   decoration: InputDecoration(
                       hintText: "Password",
                       prefixIcon: const Icon(Icons.vpn_key),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(width: 1, color: Colors.grey),
                       ),
                       border: OutlineInputBorder(
@@ -69,22 +86,27 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
 
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
 
                 GestureDetector(
-                  onTap: (){
-                    Loginuser(_email.text, _pass.text);
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
                   },
                   child: Container(
                     height: 50,
-                    width: MediaQuery.of(context).size.width / 2,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 2,
                     decoration: BoxDecoration(
-                      color: customColor.primaryColor,
+                      color: _isLogin != true
+                          ? customColor.primaryColor
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        "Login",
+                        _isLogin != true ? "Login" : "Loading...",
                         style: TextStyle(
                             color: customColor.whiteText,
                             fontWeight: FontWeight.w600,
@@ -101,17 +123,5 @@ class _SignInState extends State<SignIn> {
         ),
       ),
     );
-  }
-  void Loginuser(String email, String pass)async{
-    var crads = {
-      "email" : _email.text,
-      "password": _pass.text,
-    };
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-    var response = await CallApi().postData(crads, "/login");
-    var body = jsonDecode(response.body);
-    print(body.toString());
-
-
   }
 }
