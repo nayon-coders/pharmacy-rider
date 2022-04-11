@@ -267,7 +267,7 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
                   flex: 2,
                   child: FlatButton(
                     onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AccpectOrders()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AcpectOrders()));
                     },
                     color: customColor.confirmColor,
                     child: Text("Accpect", style: TextStyle(color: Colors.white),),

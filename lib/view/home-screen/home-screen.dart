@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-details.dart';
+import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -83,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: InkWell(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(
-                                  builder: (context)=>const AcpectOrderDetails()));
+                                  builder: (context)=>const AcpectOrders()));
                             },
                             child: DashboardBox("1", "Processing", customColor.processingColor),
                           )

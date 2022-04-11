@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
+import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-details.dart';
 
 
-class AccpectOrders extends StatefulWidget {
-  const AccpectOrders({Key? key}) : super(key: key);
+class AcpectOrders extends StatefulWidget {
+  const AcpectOrders({Key? key}) : super(key: key);
 
   @override
-  State<AccpectOrders> createState() => _AccpectOrdersState();
+  State<AcpectOrders> createState() => _AcpectOrdersState();
 }
 
-class _AccpectOrdersState extends State<AccpectOrders> {
+class _AcpectOrdersState extends State<AcpectOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +89,7 @@ class OrderList extends StatelessWidget {
             GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>AccpectOrders()));
+                    builder: (context)=>AcpectOrderDetails()));
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

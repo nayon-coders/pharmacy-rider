@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-
+import 'package:pharmacy_rider_apps/Utility/colors.dart';
 class GoForDelivery extends StatefulWidget {
   const GoForDelivery({Key? key}) : super(key: key);
 
@@ -48,6 +47,25 @@ class _GoForDeliveryState extends State<GoForDelivery> {
           ),
           ),
         ),
+        bottomNavigationBar: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 2,
+                    child: FlatButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>GoForDelivery()));
+                      },
+                      color: customColor.confirmColor,
+                      child: Text("Delivery Complete", style: TextStyle(color: Colors.white),),
+                    )
+                ),
+              ],
+            ),
+          ),
+        )
     );
   }
   Widget userInfo(String? title){
