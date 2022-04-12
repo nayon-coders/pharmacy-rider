@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
 import 'package:pharmacy_rider_apps/services/api-service.dart';
+import 'package:pharmacy_rider_apps/services/orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -16,32 +17,11 @@ class PendingOrders extends StatefulWidget {
 }
 
 class _PendingOrdersState extends State<PendingOrders> {
-  var data;
-  //show all world satatus
-  Future<void>fromOrders()async {
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    //Store Data
-    var token = localStorage.getString('token');
 
-    var url = Uri.parse(ApiServise.orders);
-    final response = await http.get(url,
-      headers: {
-        'Accept' : 'application/json',
-        'Content-Type' : 'application/json',
-        'X-Header-Token' : 'base64:KWyE5YqjEnsf0L+9R7unn5QimC8eTW21sm1WalIA2+Y=',
-        'Authorization' : 'Bearer $token',
-      },
-    );
-
-    if(response.statusCode == 200){
-      return data = jsonDecode(response.body.toString());
-    }else{
-      throw Exception("Error");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    AllOrders _allOrders = AllOrders();
     return Scaffold(
       appBar: AppBar(
 
@@ -53,7 +33,7 @@ class _PendingOrdersState extends State<PendingOrders> {
           children: [
             SizedBox(height: 20,),
             Expanded(child: FutureBuilder(
-              future: fromOrders(),
+              future: _allOrders.fromOrders(),
                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                 if(!snapshot.hasData){
                   return Center(
@@ -65,14 +45,20 @@ class _PendingOrdersState extends State<PendingOrders> {
                 }else{
                   //show data;
                  return ListView.builder(
-                   itemCount: data['data'].length,
+                   itemCount: snapshot.data['data'].length,
                      itemBuilder: (context, index){
+                     if(snapshot.data['data'][index]['status'] == 'Pending'){
                        return OrderList(
-                           orderId: data['data'][index]['order_number '].toString(),
-                           date: data['data'][index]['date'].toString(),
-                           OrderId: data['data'][index]['id'].toString(),
+                         orderId: snapshot.data['data'][index]['order_number '].toString(),
+                         date: snapshot.data['data'][index]['date'].toString(),
+                         OrderId: snapshot.data['data'][index]['id'].toString(),
                        );
-                       print(data.toString());
+                     }else{
+                       return Center();
+                     }
+
+
+
                      }
                  );
                 }

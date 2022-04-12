@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:pharmacy_rider_apps/services/api.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../Utility/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../services/auth-useri.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);

@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
-import 'package:pharmacy_rider_apps/services/api.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
 import 'package:pharmacy_rider_apps/services/auth.dart';
+import 'package:pharmacy_rider_apps/services/orders.dart';
 import 'package:pharmacy_rider_apps/view/auth/sign-in.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-details.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../services/auth-useri.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,6 +24,8 @@ class _HomeScreenState extends State<HomeScreen>  {
   bool _isLogout = false;
   @override
   Widget build(BuildContext context) {
+    AllOrders _allOrders = AllOrders();
+
     return Scaffold(
       body:SingleChildScrollView(
         child: _isLogout != true
@@ -87,7 +91,22 @@ class _HomeScreenState extends State<HomeScreen>  {
                               Navigator.push(context, MaterialPageRoute(
                                   builder: (context)=>const PendingOrders()));
                             },
-                            child: DashboardBox("20", "Pending", customColor.pendingColor),
+                            child: FutureBuilder(
+                                future: _allOrders.fromOrders(),
+                                builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                  if(snapshot.hasData){
+                                    return DashboardBox(
+                                        "1", "Cancle", customColor.primaryColor);
+                                  }else{
+                                    return DashboardBox("1", "Cancle", customColor.primaryColor);
+                                  }
+
+                                }
+                            )
+
+
+
+
                           )
                       ),
 
@@ -219,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen>  {
                 children: [
                   Container(
                     padding: const EdgeInsets.only(top: 150),
-                      child: SpinKitCircle(
+                      child: const SpinKitCircle(
                       color: Colors.red,
                         duration: Duration(seconds: 1),
                       ),
@@ -275,13 +294,15 @@ class DashboardBox extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:  [
-              Text(Number,
+
+              Text("${Number}",
                 style: const TextStyle(
                     fontSize: 35,
                     color: Colors.white,
                     fontWeight: FontWeight.bold
                 ),
               ),
+
               Text(Value,
                 style:const TextStyle(
                     fontSize: 25,

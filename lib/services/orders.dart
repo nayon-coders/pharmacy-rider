@@ -1,19 +1,17 @@
 import 'dart:convert';
-import 'package:pharmacy_rider_apps/model/PendingOrderDetails.dart';
 import 'package:pharmacy_rider_apps/services/api-service.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class OrderService{
-  var data;
-  //show all world satatus
-  Future<void>fromOrdersDetails(ordersID)async {
+class AllOrders{
+  var AllData;
+  Future<void>fromOrders()async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     //Store Data
     var token = localStorage.getString('token');
 
-    var url = Uri.parse(ApiServise.ordersDetails+"/"+ordersID);
+    var url = Uri.parse(ApiServise.orders);
     final response = await http.get(url,
       headers: {
         'Accept' : 'application/json',
@@ -24,8 +22,9 @@ class OrderService{
     );
 
     if(response.statusCode == 200){
-     data = jsonDecode(response.body.toString());
-     return data;
+      AllData = jsonDecode(response.body.toString());
+      print(AllData);
+     return AllData;
 
     }else{
       throw Exception("Error");

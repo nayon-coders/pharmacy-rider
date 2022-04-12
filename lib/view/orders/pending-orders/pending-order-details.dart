@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
-import 'package:pharmacy_rider_apps/model/PendingOrderDetails.dart';
-import 'package:pharmacy_rider_apps/services/api-service.dart';
-import 'package:pharmacy_rider_apps/services/pending-order-details.dart';
+import '../../../services/order-details.drart.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +21,9 @@ class PendingOrderDetails extends StatefulWidget {
 }
 
 class _PendingOrderDetailsState extends State<PendingOrderDetails> {
-
+var totalAmount;
+var amount;
+var shipping;
   @override
   Widget build(BuildContext context) {
     OrderService _orderService = OrderService();
@@ -36,17 +36,21 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: FutureBuilder(
+
               future: _orderService.fromOrdersDetails("${widget.OrderId}"),
                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                   if(!snapshot.hasData){
-                    return  Padding(
-                      padding: const EdgeInsets.only(top: 150),
+                    return  const Padding(
+                      padding: EdgeInsets.only(top: 150),
                       child: SpinKitCircle(
                         color: customColor.primaryColor,
                         duration: Duration(seconds: 1),
                       ),
                     );
                   }else{
+                    amount = double.parse(snapshot.data['data']['amount']);
+                    shipping = double.parse(snapshot.data['data']['shipping']);
+                    totalAmount = amount + shipping;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -148,8 +152,10 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: snapshot.data['data']['order_products '].length,
+
                             itemBuilder: (context,index){
                               var productlist = snapshot.data['data']['order_products '][index];
+
                               return  Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children:  [
@@ -186,7 +192,7 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width / 5,
                                     child: Center(
-                                      child: Text(productlist['total'] + " ৳".toString(),
+                                      child: Text(productlist['total'].toString(),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 18,
@@ -200,7 +206,7 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
                               );
                             }),
 
-                        const Divider(color: Colors.grey,),
+                         Divider(color: Colors.grey, height: 2,),
                         //total
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -212,7 +218,7 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
                               ),
                             ),
                             const SizedBox(width: 5,),
-                            Text(snapshot.data['data']['shipping'] + " ৳",
+                            Text(snapshot.data['data']['amount'],
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 18,
@@ -220,6 +226,7 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
                             ),
                           ],
                         ),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -230,7 +237,7 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
                               ),
                             ),
                             const SizedBox(width: 5,),
-                            Text(snapshot.data['data']['shipping'] + " ৳",
+                            Text(snapshot.data['data']['shipping'],
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 15,
@@ -240,16 +247,16 @@ class _PendingOrderDetailsState extends State<PendingOrderDetails> {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Text("Total Amount:",
+                          children:  [
+                            const Text("Total Amount:",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),
                             ),
-                            SizedBox(width: 5,),
-                            Text("1500.00",
-                              style: TextStyle(
+                            const SizedBox(width: 5,),
+                            Text(totalAmount.toString(),
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 15,
                               ),
