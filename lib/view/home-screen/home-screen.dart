@@ -1,8 +1,14 @@
+import 'dart:convert';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
+import 'package:pharmacy_rider_apps/services/api.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
+import 'package:pharmacy_rider_apps/services/auth.dart';
+import 'package:pharmacy_rider_apps/view/auth/sign-in.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-details.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,12 +17,15 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>  {
+
+  bool _isLogout = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body:SingleChildScrollView(
-        child: Padding(
+        child: _isLogout != true
+            ? Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +54,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                           IconButton(
-                              onPressed: (){},
+                              onPressed: (){
+                                setState(() {
+
+                                  _logOut();
+                                });
+                              },
                               icon: const Icon(Icons.logout, size: 30,)
                           ),
                         ],
@@ -199,9 +213,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 ],
               ),
-            ),
+            )
+            : SafeArea(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 150),
+                      child: SpinKitCircle(
+                      color: Colors.red,
+                        duration: Duration(seconds: 1),
+                      ),
+                  ),
+                  Text("Logout..."),
+                ],
+              ),
+            )
       ),
     );
+  }
+  void _logOut()async{
+    setState(() {
+      _isLogout = true;
+    });
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    localStorage.remove('token');
+    //Store Data
+    var token = localStorage.getString('token');
+    // token == null ? Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn())): null;
+    var response = await CallApi().postData("token", '/logout');
+    var body = jsonDecode(response.body);
+
+
+    if(response.statusCode == 200){
+      print("logout success");
+    }
+    setState(() {
+      token == null ? Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn())): null;
+      _isLogout = false;
+    });
+
   }
 }
 

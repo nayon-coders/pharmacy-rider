@@ -1,9 +1,12 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:pharmacy_rider_apps/services/api.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../Utility/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
@@ -11,7 +14,7 @@ class SignIn extends StatefulWidget {
   _SignInState createState() => _SignInState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignInState extends State<SignIn>  with TickerProviderStateMixin {
   //controller
   TextEditingController _email = TextEditingController();
   TextEditingController _pass = TextEditingController();
@@ -20,7 +23,7 @@ class _SignInState extends State<SignIn> {
   final GlobalKey<FormState> _loginuser = GlobalKey<FormState>();
 
   //is login
-  bool _isLogin = false;
+  bool isLogin = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   _showMsg(msg) {
@@ -35,6 +38,10 @@ class _SignInState extends State<SignIn> {
     );
     _scaffoldKey.currentState?.showSnackBar(snackBar);
   }
+
+  late final AnimationController _controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this)..repeat();
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +77,13 @@ class _SignInState extends State<SignIn> {
                         borderRadius: BorderRadius.circular(5),
                       )
                   ),
+                  validator: (value){
+                    if (value == null || value.isEmpty) {
+                      return "Email field is required";
+                    }else{
+                      return null;
+                    }
+                  },
                 ),
                 const SizedBox(height: 10,),
                 TextFormField(
@@ -84,13 +98,24 @@ class _SignInState extends State<SignIn> {
                         borderRadius: BorderRadius.circular(5),
                       )
                   ),
+                  validator: (value){
+                    if (value == null || value.isEmpty) {
+                      return "Password field is required";
+                    }else{
+                      return null;
+                    }
+                  },
                 ),
 
                 const SizedBox(height: 10,),
 
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                    if(_loginuser.currentState!.validate()){
+                      _login();
+                    }
+
+                    //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
                   },
                   child: Container(
                     height: 50,
@@ -99,20 +124,25 @@ class _SignInState extends State<SignIn> {
                         .size
                         .width / 2,
                     decoration: BoxDecoration(
-                      color: _isLogin != true
-                          ? customColor.primaryColor
-                          : Colors.grey,
+                      color:customColor.primaryColor,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Center(
-                      child: Text(
-                        _isLogin != true ? "Login" : "Loading...",
-                        style: TextStyle(
-                            color: customColor.whiteText,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20
+                      child: isLogin != true
+                          ?  Text(
+                            "Login",
+                            style: TextStyle(
+                                color: customColor.whiteText,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20
+                            ),
+                          )
+                          :  Center(
+                          child:  SpinKitCircle(
+                          color: Colors.white,
+                          duration: Duration(seconds: 1),
                         ),
-                      ),
+                      )
                     ),
                   ),
                 )
@@ -123,5 +153,37 @@ class _SignInState extends State<SignIn> {
         ),
       ),
     );
+  }
+  void _login() async{
+    setState(() {
+      isLogin = true;
+    });
+
+    var data = {
+      'email' : _email.text,
+      'password' : _pass.text,
+    };
+
+    var response = await CallApi().postData(data, '/login');
+    var body = jsonDecode(response.body);
+    if(response.statusCode == 200){
+      //create instance
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      //Store Data
+       localStorage.setString('token', body['access_token']);
+       localStorage.setString('user', jsonEncode(body['user']));
+       Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(body['message']), backgroundColor: Colors.redAccent,),
+      );
+    }
+
+    setState(() {
+      isLogin =false;
+    });
+
+
   }
 }
