@@ -1,23 +1,20 @@
-import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
-import 'package:pharmacy_rider_apps/services/api-service.dart';
 import 'package:pharmacy_rider_apps/services/orders.dart';
-import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-details.dart';
-import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:pharmacy_rider_apps/view/orders/delivery-order/delivery-order-details.dart';
 
-class acpectOrders extends StatefulWidget {
-  const acpectOrders({Key? key}) : super(key: key);
+class CancelOrdersList extends StatefulWidget {
+  const CancelOrdersList({Key? key}) : super(key: key);
 
   @override
-  State<acpectOrders> createState() => _acpectOrdersState();
+  State<CancelOrdersList> createState() => _CancelOrdersListState();
 }
 
-class _acpectOrdersState extends State<acpectOrders> {
+class _CancelOrdersListState extends State<CancelOrdersList> {
 
 
   @override
@@ -26,8 +23,8 @@ class _acpectOrdersState extends State<acpectOrders> {
     return Scaffold(
       appBar: AppBar(
 
-        title: const Text("Accpet Orders List"),
-        backgroundColor: Colors.green,
+        title: const Text("Cancel Orders List"),
+        backgroundColor: Colors.redAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10,),
@@ -49,11 +46,12 @@ class _acpectOrdersState extends State<acpectOrders> {
                     return ListView.builder(
                         itemCount: snapshot.data['data'].length,
                         itemBuilder: (context, index){
-                          if(snapshot.data['data'][index]['status'] == 'Processing'){
+                          if(snapshot.data['data'][index]['status'] == 'Cancel'){
                             return OrderList(
                               orderId: snapshot.data['data'][index]['order_number '].toString(),
                               date: snapshot.data['data'][index]['date'].toString(),
                               OrderId: snapshot.data['data'][index]['id'].toString(),
+                              status: snapshot.data['data'][index]['status'].toString(),
                             );
                           }else{
                             return Center();
@@ -77,8 +75,8 @@ class _acpectOrdersState extends State<acpectOrders> {
 }
 
 class OrderList extends StatelessWidget {
-  final String orderId, date, OrderId;
-  OrderList({required this.orderId, required this.date, required this.OrderId});
+  final String orderId, date, OrderId, status;
+  OrderList({required this.orderId, required this.date, required this.OrderId, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -103,19 +101,25 @@ class OrderList extends StatelessWidget {
                     fontSize: 15,
 
                   ),
-                )
+                ),
+                Text("Status: ${status}",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                  ),
+                ),
               ],
             ),
             GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>AcpectOrderDetails(OrderId: OrderId)));
+                    builder: (context)=>DeliveryOrderDetails(OrderId: OrderId)));
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: customColor.confirmColor,
+                  color: customColor.cancelColor,
                 ),
                 child: Text("Details",
                   style: TextStyle(

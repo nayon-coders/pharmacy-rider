@@ -1,18 +1,18 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:pharmacy_rider_apps/services/api-service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+class UpdatePerscription{
 
-class OrderService{
-  var data;
-  //show all world status
-  Future<void>fromOrdersDetails(ordersID)async {
+  UpdatePerscriptionData(data, pid)async{
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     //Store Data
     var token = localStorage.getString('token');
 
-    var url = Uri.parse(ApiServise.ordersDetails+"/"+ordersID);
-    final response = await http.get(url,
+    var fullUrl = ApiServise.baseUrl+"/admin/requisition/${pid}/change-status";
+    return await http.put(
+      Uri.parse(fullUrl),
+      body: jsonEncode(data),
       headers: {
         'Accept' : 'application/json',
         'Content-Type' : 'application/json',
@@ -20,15 +20,6 @@ class OrderService{
         'Authorization' : 'Bearer $token',
       },
     );
-
-    if(response.statusCode == 200){
-      data = jsonDecode(response.body.toString());
-      return data;
-
-    }else{
-      throw Exception("Error");
-    }
   }
-
 
 }

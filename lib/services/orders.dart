@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:pharmacy_rider_apps/services/api-service.dart';
-import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,7 +22,7 @@ class AllOrders{
 
     if(response.statusCode == 200){
       AllData = jsonDecode(response.body.toString());
-      print(AllData);
+
      return AllData;
 
     }else{

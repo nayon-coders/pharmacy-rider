@@ -7,7 +7,13 @@ import 'package:pharmacy_rider_apps/services/orders.dart';
 import 'package:pharmacy_rider_apps/view/auth/sign-in.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-details.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-orders.dart';
+import 'package:pharmacy_rider_apps/view/orders/cancle/cancel-order-list.dart';
+import 'package:pharmacy_rider_apps/view/orders/delivery-order/delivery-orders-list.dart';
+import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
+import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
+import 'package:pharmacy_rider_apps/view/pescription/accept-order/accept-prescription-list.dart';
+import 'package:pharmacy_rider_apps/view/pescription/pending-pescription/pending-pescription-list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../services/auth-useri.dart';
@@ -21,6 +27,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>  {
 
+  var toatalPendingOrders;
   bool _isLogout = false;
   @override
   Widget build(BuildContext context) {
@@ -84,42 +91,57 @@ class _HomeScreenState extends State<HomeScreen>  {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // pending orders count
                       Expanded(
                         flex: 2,
                           child: InkWell(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(
-                                  builder: (context)=>const PendingOrders()));
+                                  builder: (context)=>PendingOrders()));
                             },
                             child: FutureBuilder(
                                 future: _allOrders.fromOrders(),
                                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                                   if(snapshot.hasData){
-                                    return DashboardBox(
-                                        "1", "Cancle", customColor.primaryColor);
+                                    for(var i = 0; i<snapshot.data['data'].length; i ++ ){
+                                      if(snapshot.data['data'][i]['status'] == 'Pending'){
+                                        return DashboardBox("${i}", "Pending", customColor.pendingColor);
+                                      }
+                                    }
                                   }else{
-                                    return DashboardBox("1", "Cancle", customColor.primaryColor);
+                                    return DashboardBox("0", "Pending", customColor.pendingColor);
                                   }
-
+                                  return DashboardBox("0", "Pending", customColor.pendingColor);
                                 }
-                            )
-
-
-
-
+                            ),
                           )
                       ),
 
 
                       SizedBox(width: 10,),
+                      //processing order count
                       Expanded(
                           flex: 2,
                           child: InkWell(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(
-                                  builder: (context)=>const AcpectOrders()));
+                                  builder: (context)=>const acpectOrders()));
                             },
-                            child: DashboardBox("1", "Processing", customColor.processingColor),
+                            child: FutureBuilder(
+                                future: _allOrders.fromOrders(),
+                                builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                  if(snapshot.hasData){
+                                    for(var i = 0; i<snapshot.data['data'].length; i ++ ){
+                                      if(snapshot.data['data'][i]['status'] == 'Processing'){
+                                        return DashboardBox("${i + 1}", "Accept", Colors.green);
+                                      }
+                                    }
+                                  }else{
+                                    return DashboardBox("0", "Accept", Colors.green);
+                                  }
+                                  return DashboardBox("0", "Accept", Colors.green);
+                                }
+                            ),
                           )
                       ),
 
@@ -129,21 +151,55 @@ class _HomeScreenState extends State<HomeScreen>  {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      //confirmed order count
                       Expanded(
                           flex: 2,
                           child: InkWell(
-                            onTap: (){},
-                            child: DashboardBox("1", "Confirm", customColor.confirmColor),
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryOrdersList()));
+                            },
+                            child: FutureBuilder(
+                                future: _allOrders.fromOrders(),
+                                builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                  if(snapshot.hasData){
+                                    for(var i = 0; i<snapshot.data['data'].length; i ++ ){
+                                      if(snapshot.data['data'][i]['status'] == 'Confirmed'){
+                                        return DashboardBox("${i + 1}", "Confirmed", customColor.confirmColor);
+                                      }
+                                    }
+                                  }else{
+                                    return DashboardBox("0", "Confirmed", customColor.confirmColor);
+                                  }
+                                  return DashboardBox("0", "Confirmed", customColor.confirmColor);
+                                }
+                            ),
                           )
                       ),
 
 
                       SizedBox(width: 10,),
+                      //cancel order count
                       Expanded(
                           flex: 2,
                           child: InkWell(
-                            onTap: (){},
-                            child: DashboardBox("1", "Cancle", customColor.cancelColor),
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>CancelOrdersList()));
+                            },
+                            child: FutureBuilder(
+                                future: _allOrders.fromOrders(),
+                                builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                  if(snapshot.hasData){
+                                    for(var i = 0; i<snapshot.data['data'].length; i ++ ){
+                                      if(snapshot.data['data'][i]['status'] == 'Cancel'){
+                                        return DashboardBox("${i + 1}", "Cancel", customColor.cancelColor);
+                                      }
+                                    }
+                                  }else{
+                                    return DashboardBox("0", "Cancel", customColor.cancelColor);
+                                  }
+                                  return DashboardBox("0", "Cancel", customColor.cancelColor);
+                                }
+                            ),
                           )
                       ),
                     ],
@@ -190,7 +246,9 @@ class _HomeScreenState extends State<HomeScreen>  {
                       Expanded(
                           flex: 2,
                           child: GestureDetector(
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> PendingPescriotionList()));
+                            },
                             child: DashboardBox("1", "Pending", customColor.pendingColor),
                           )
                       ),
@@ -200,35 +258,16 @@ class _HomeScreenState extends State<HomeScreen>  {
                       Expanded(
                           flex: 2,
                           child: GestureDetector(
-                            onTap: (){},
-                            child: DashboardBox("1", "Processing", customColor.processingColor),
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> AcceptPrescriptionList()));
+                            },
+                            child: DashboardBox("1", "Accept", customColor.confirmColor),
                           )
                       ),
                     ],
                   ),
                   const SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: InkWell(
-                            onTap: (){},
-                            child: DashboardBox("1", "Confirm", customColor.confirmColor),
-                          )
-                      ),
 
-
-                      SizedBox(width: 10,),
-                      Expanded(
-                          flex: 2,
-                          child: InkWell(
-                            onTap: (){},
-                            child: DashboardBox("1", "Cancle", customColor.cancelColor),
-                          )
-                      ),
-                    ],
-                  ),
 
                 ],
               ),

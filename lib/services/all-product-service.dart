@@ -3,15 +3,14 @@ import 'package:pharmacy_rider_apps/services/api-service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class OrderService{
-  var data;
-  //show all world status
-  Future<void>fromOrdersDetails(ordersID)async {
+class AllProduct{
+  var AllProductList;
+  Future<void>fromAllProductList()async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     //Store Data
     var token = localStorage.getString('token');
 
-    var url = Uri.parse(ApiServise.ordersDetails+"/"+ordersID);
+    var url = Uri.parse(ApiServise.products);
     final response = await http.get(url,
       headers: {
         'Accept' : 'application/json',
@@ -22,8 +21,8 @@ class OrderService{
     );
 
     if(response.statusCode == 200){
-      data = jsonDecode(response.body.toString());
-      return data;
+      AllProductList = jsonDecode(response.body.toString());
+      return AllProductList;
 
     }else{
       throw Exception("Error");

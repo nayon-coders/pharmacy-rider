@@ -35,7 +35,26 @@ class _PendingOrdersState extends State<PendingOrders> {
             Expanded(child: FutureBuilder(
               future: _allOrders.fromOrders(),
                 builder: (context, AsyncSnapshot<dynamic> snapshot){
-                if(!snapshot.hasData){
+                if(snapshot.hasData){
+                  return ListView.builder(
+                      itemCount: snapshot.data['data'].length,
+                      itemBuilder: (context, index){
+                        if(snapshot.data['data'][index]['status'] == 'Pending'){
+                          return OrderList(
+                            orderId: snapshot.data['data'][index]['order_number '].toString(),
+                            date: snapshot.data['data'][index]['date'].toString(),
+                            OrderId: snapshot.data['data'][index]['id'].toString(),
+                          );
+                        }else{
+                          return Center();
+                        }
+
+
+
+                      }
+                  );
+
+                }else if(snapshot.connectionState == ConnectionState.waiting){
                   return Center(
                     child: SpinKitCircle(
                       color: customColor.primaryColor,
@@ -44,23 +63,9 @@ class _PendingOrdersState extends State<PendingOrders> {
                   );
                 }else{
                   //show data;
-                 return ListView.builder(
-                   itemCount: snapshot.data['data'].length,
-                     itemBuilder: (context, index){
-                     if(snapshot.data['data'][index]['status'] == 'Pending'){
-                       return OrderList(
-                         orderId: snapshot.data['data'][index]['order_number '].toString(),
-                         date: snapshot.data['data'][index]['date'].toString(),
-                         OrderId: snapshot.data['data'][index]['id'].toString(),
-                       );
-                     }else{
-                       return Center();
-                     }
-
-
-
-                     }
-                 );
+                  return Center(
+                    child:Text("No Data Fpound"),
+                  );
                 }
 
               }
