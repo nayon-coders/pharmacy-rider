@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.0.20
   cached_network_image_builder: ^0.2.0
   transparent_image: ^2.0.0
+  pie_chart: ^5.3.0
 
 
 

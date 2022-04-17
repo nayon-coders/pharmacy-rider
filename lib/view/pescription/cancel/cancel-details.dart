@@ -8,15 +8,15 @@ import 'package:pharmacy_rider_apps/services/prescription-service.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
 import 'package:pharmacy_rider_apps/view/pescription/add-product/add-product.dart';
 
-class AcceptPrescriptionDetails extends StatefulWidget {
+class CanceledPescriptionDetails extends StatefulWidget {
   final String id;
-  const AcceptPrescriptionDetails({Key? key, required this.id}) : super(key: key);
+  const CanceledPescriptionDetails({Key? key, required this.id, }) : super(key: key);
 
   @override
-  _AcceptPrescriptionDetailsState createState() => _AcceptPrescriptionDetailsState();
+  _CanceledPescriptionDetailsState createState() => _CanceledPescriptionDetailsState();
 }
 
-class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
+class _CanceledPescriptionDetailsState extends State<CanceledPescriptionDetails> {
   bool _isLoding = false;
 
   TextEditingController _notes = TextEditingController();
@@ -27,6 +27,7 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Files"),
+          backgroundColor: Colors.redAccent,
         ),
 
         body: Padding(
@@ -73,54 +74,10 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
             ],
           ),
         ),
-        bottomNavigationBar: Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              children: [
 
-                Expanded(
-                    flex: 2,
-                    child: FlatButton(
-                      onPressed: (){
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Are You Sure? '),
-                            content:   Text('You Want to Add More Product.?'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Addproduct( PID: widget.id,)));
-                                },
-                                child: Text("Ok"),
-                              )
-
-                            ],
-                          ),
-                        );
-
-                      },
-                      color: customColor.confirmColor,
-                      child: Text("Add Products", style: TextStyle(color: Colors.white),),
-                    )
-                ),
-
-              
-
-                SizedBox(width: 10,),
-
-              ],
-            ),
-          ),
-        )
     );
 
   }
-
-void _deletePrescription (id) async{
-
-}
 
 
 }

@@ -18,7 +18,7 @@ class PendingOrders extends StatefulWidget {
 
 class _PendingOrdersState extends State<PendingOrders> {
 
-
+  var length;
   @override
   Widget build(BuildContext context) {
     AllOrders _allOrders = AllOrders();
@@ -40,6 +40,7 @@ class _PendingOrdersState extends State<PendingOrders> {
                       itemCount: snapshot.data['data'].length,
                       itemBuilder: (context, index){
                         if(snapshot.data['data'][index]['status'] == 'Pending'){
+                          length = index;
                           return OrderList(
                             orderId: snapshot.data['data'][index]['order_number '].toString(),
                             date: snapshot.data['data'][index]['date'].toString(),

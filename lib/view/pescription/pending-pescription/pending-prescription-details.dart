@@ -10,7 +10,7 @@ import 'package:pharmacy_rider_apps/view/pescription/add-product/add-product.dar
 
 class PendingPescriptionDetails extends StatefulWidget {
   final String id;
-  const PendingPescriptionDetails({Key? key, required this.id}) : super(key: key);
+  const PendingPescriptionDetails({Key? key, required this.id, }) : super(key: key);
 
   @override
   _PendingPescriptionDetailsState createState() => _PendingPescriptionDetailsState();
@@ -73,7 +73,7 @@ class _PendingPescriptionDetailsState extends State<PendingPescriptionDetails> {
           ],
         ),
       ),
-        bottomNavigationBar: Container(
+       bottomNavigationBar: Container(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Row(

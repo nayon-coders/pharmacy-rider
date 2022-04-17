@@ -9,10 +9,12 @@ import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-det
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/cancle/cancel-order-list.dart';
 import 'package:pharmacy_rider_apps/view/orders/delivery-order/delivery-orders-list.dart';
+import 'package:pharmacy_rider_apps/view/orders/orders-reports.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
 import 'package:pharmacy_rider_apps/view/pescription/accept-order/accept-prescription-list.dart';
+import 'package:pharmacy_rider_apps/view/pescription/cancel/calcel-prescription-list.dart';
 import 'package:pharmacy_rider_apps/view/pescription/pending-pescription/pending-pescription-list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,7 +29,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>  {
 
-  var toatalPendingOrders;
+  var PendingOrderLength;
+  var ProcessingOrderLength;
+  var CancleOrderLength;
+  var ConfirmedOrderLength;
+
   bool _isLogout = false;
   @override
   Widget build(BuildContext context) {
@@ -105,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen>  {
                                   if(snapshot.hasData){
                                     for(var i = 0; i<snapshot.data['data'].length; i ++ ){
                                       if(snapshot.data['data'][i]['status'] == 'Pending'){
-                                        return DashboardBox("${i}", "Pending", customColor.pendingColor);
+                                        return DashboardBox("$i", "Pending", customColor.pendingColor);
                                       }
                                     }
                                   }else{
@@ -163,14 +169,14 @@ class _HomeScreenState extends State<HomeScreen>  {
                                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                                   if(snapshot.hasData){
                                     for(var i = 0; i<snapshot.data['data'].length; i ++ ){
-                                      if(snapshot.data['data'][i]['status'] == 'Confirmed'){
-                                        return DashboardBox("${i + 1}", "Confirmed", customColor.confirmColor);
+                                      if(snapshot.data['data'][i]['status'] == 'Delivered'){
+                                        return DashboardBox("${i + 1}", "Delivered", customColor.confirmColor);
                                       }
                                     }
                                   }else{
-                                    return DashboardBox("0", "Confirmed", customColor.confirmColor);
+                                    return DashboardBox("0", "Delivered", customColor.confirmColor);
                                   }
-                                  return DashboardBox("0", "Confirmed", customColor.confirmColor);
+                                  return DashboardBox("0", "Delivered", customColor.confirmColor);
                                 }
                             ),
                           )
@@ -191,6 +197,7 @@ class _HomeScreenState extends State<HomeScreen>  {
                                   if(snapshot.hasData){
                                     for(var i = 0; i<snapshot.data['data'].length; i ++ ){
                                       if(snapshot.data['data'][i]['status'] == 'Cancel'){
+
                                         return DashboardBox("${i + 1}", "Cancel", customColor.cancelColor);
                                       }
                                     }
@@ -207,27 +214,30 @@ class _HomeScreenState extends State<HomeScreen>  {
 
                   const SizedBox(height: 20,),
                   //Order reports....
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Order Reports",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                              color: Colors.deepOrange,
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>OrdersReports()));
+                    },
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Order Reports",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                                color: Colors.deepOrange,
+                              ),
                             ),
-                          ),
-                          Icon(Icons.report, color: Colors.deepOrangeAccent,)
-                        ],
+                            Icon(Icons.report, color: Colors.deepOrangeAccent,)
+                          ],
+                        ),
                       ),
                     ),
                   ),
-
-
 
                   //Recreation
                   const SizedBox(height: 10,),
@@ -252,8 +262,6 @@ class _HomeScreenState extends State<HomeScreen>  {
                             child: DashboardBox("1", "Pending", customColor.pendingColor),
                           )
                       ),
-
-
                       SizedBox(width: 10,),
                       Expanded(
                           flex: 2,
@@ -262,6 +270,22 @@ class _HomeScreenState extends State<HomeScreen>  {
                               Navigator.push(context, MaterialPageRoute(builder: (context)=> AcceptPrescriptionList()));
                             },
                             child: DashboardBox("1", "Accept", customColor.confirmColor),
+                          )
+                      ),
+
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+
+                      Expanded(
+                          flex: 1,
+                          child: GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> CancelPrescriotionList()));
+                            },
+                            child: DashboardBox("1", "Canceled", customColor.cancelColor),
                           )
                       ),
                     ],
