@@ -112,7 +112,7 @@ class PrescrptionList extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: customColor.primaryColor,
+                  color: customColor.confirmColor,
                 ),
                 child: Text("Details",
                   style: TextStyle(

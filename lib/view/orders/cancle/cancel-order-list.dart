@@ -36,6 +36,10 @@ class _CancelOrdersListState extends State<CancelOrdersList> {
                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                   if(!snapshot.hasData){
                     return Center(
+                      child: Text("No Cancel Data"),
+                    );
+                  }else if(snapshot.connectionState == ConnectionState.waiting){
+                    return Center(
                       child: SpinKitCircle(
                         color: customColor.primaryColor,
                         duration: Duration(seconds: 1),
@@ -54,11 +58,10 @@ class _CancelOrdersListState extends State<CancelOrdersList> {
                               status: snapshot.data['data'][index]['status'].toString(),
                             );
                           }else{
-                            return Center();
+                            return const Center(
+
+                            );
                           }
-
-
-
                         }
                     );
                   }

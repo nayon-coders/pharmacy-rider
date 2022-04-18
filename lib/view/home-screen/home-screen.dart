@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
 import 'package:pharmacy_rider_apps/services/auth.dart';
 import 'package:pharmacy_rider_apps/services/orders.dart';
+import 'package:pharmacy_rider_apps/services/prescription-service.dart';
 import 'package:pharmacy_rider_apps/view/auth/sign-in.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-details.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/cancle/cancel-order-list.dart';
 import 'package:pharmacy_rider_apps/view/orders/delivery-order/delivery-orders-list.dart';
-import 'package:pharmacy_rider_apps/view/orders/orders-reports.dart';
+import 'package:pharmacy_rider_apps/view/orders/order-reports/orders-reports.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
@@ -29,15 +30,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>  {
 
-  var PendingOrderLength;
-  var ProcessingOrderLength;
-  var CancleOrderLength;
-  var ConfirmedOrderLength;
-
   bool _isLogout = false;
   @override
   Widget build(BuildContext context) {
     AllOrders _allOrders = AllOrders();
+    PrescriptionService _prescriptionService = PrescriptionService();
 
     return Scaffold(
       body:SingleChildScrollView(
@@ -73,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen>  {
                           IconButton(
                               onPressed: (){
                                 setState(() {
-
                                   _logOut();
                                 });
                               },
@@ -109,15 +105,17 @@ class _HomeScreenState extends State<HomeScreen>  {
                                 future: _allOrders.fromOrders(),
                                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                                   if(snapshot.hasData){
+                                    int length = 0;
                                     for(var i = 0; i<snapshot.data['data'].length; i ++ ){
                                       if(snapshot.data['data'][i]['status'] == 'Pending'){
-                                        return DashboardBox("$i", "Pending", customColor.pendingColor);
+                                        length += 1;
                                       }
                                     }
+                                    return DashboardBox(length, "Pending", customColor.pendingColor);
                                   }else{
-                                    return DashboardBox("0", "Pending", customColor.pendingColor);
+                                    return DashboardBox(0, "Pending", customColor.pendingColor);
                                   }
-                                  return DashboardBox("0", "Pending", customColor.pendingColor);
+
                                 }
                             ),
                           )
@@ -137,15 +135,17 @@ class _HomeScreenState extends State<HomeScreen>  {
                                 future: _allOrders.fromOrders(),
                                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                                   if(snapshot.hasData){
+                                    int ConfiremdOrdersLength = 0;
                                     for(var i = 0; i<snapshot.data['data'].length; i ++ ){
                                       if(snapshot.data['data'][i]['status'] == 'Processing'){
-                                        return DashboardBox("${i + 1}", "Accept", Colors.green);
+                                        ConfiremdOrdersLength += 1;
                                       }
                                     }
+                                    return DashboardBox(ConfiremdOrdersLength, "Accept", Colors.green);
                                   }else{
-                                    return DashboardBox("0", "Accept", Colors.green);
+                                    return DashboardBox(0, "Pending", customColor.pendingColor);
                                   }
-                                  return DashboardBox("0", "Accept", Colors.green);
+
                                 }
                             ),
                           )
@@ -168,15 +168,17 @@ class _HomeScreenState extends State<HomeScreen>  {
                                 future: _allOrders.fromOrders(),
                                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                                   if(snapshot.hasData){
+                                    int length = 0;
                                     for(var i = 0; i<snapshot.data['data'].length; i ++ ){
                                       if(snapshot.data['data'][i]['status'] == 'Delivered'){
-                                        return DashboardBox("${i + 1}", "Delivered", customColor.confirmColor);
+                                        length += 1;
                                       }
                                     }
+                                    return DashboardBox(length, "Delivered", customColor.confirmColor);
                                   }else{
-                                    return DashboardBox("0", "Delivered", customColor.confirmColor);
+                                    return DashboardBox(0, "Delivered", customColor.confirmColor);
                                   }
-                                  return DashboardBox("0", "Delivered", customColor.confirmColor);
+
                                 }
                             ),
                           )
@@ -195,16 +197,17 @@ class _HomeScreenState extends State<HomeScreen>  {
                                 future: _allOrders.fromOrders(),
                                 builder: (context, AsyncSnapshot<dynamic> snapshot){
                                   if(snapshot.hasData){
+                                    int length = 0;
                                     for(var i = 0; i<snapshot.data['data'].length; i ++ ){
-                                      if(snapshot.data['data'][i]['status'] == 'Cancel'){
-
-                                        return DashboardBox("${i + 1}", "Cancel", customColor.cancelColor);
+                                      if(snapshot.data['data'][i]['status'] == 'Canceled'){
+                                        length += 1;
                                       }
                                     }
+                                    return DashboardBox(length, "Canceled", customColor.cancelColor);
                                   }else{
-                                    return DashboardBox("0", "Cancel", customColor.cancelColor);
+                                    return DashboardBox(0, "Canceled", customColor.cancelColor);
                                   }
-                                  return DashboardBox("0", "Cancel", customColor.cancelColor);
+
                                 }
                             ),
                           )
@@ -259,7 +262,23 @@ class _HomeScreenState extends State<HomeScreen>  {
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=> PendingPescriotionList()));
                             },
-                            child: DashboardBox("1", "Pending", customColor.pendingColor),
+                            child: FutureBuilder(
+                                future: _prescriptionService.formPrescriptionServiceList(),
+                                builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                  if(snapshot.hasData){
+                                    int length = 0;
+                                    for(var i = 0; i<snapshot.data['data'].length; i ++ ){
+                                      if(snapshot.data['data'][i]['status'] == 'Pending'){
+                                        length += 1;
+                                      }
+                                    }
+                                    return DashboardBox(length, "Pending", customColor.pendingColor);
+                                  }else{
+                                    return DashboardBox(0, "Pending", customColor.pendingColor);
+                                  }
+
+                                }
+                            ),
                           )
                       ),
                       SizedBox(width: 10,),
@@ -269,7 +288,23 @@ class _HomeScreenState extends State<HomeScreen>  {
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=> AcceptPrescriptionList()));
                             },
-                            child: DashboardBox("1", "Accept", customColor.confirmColor),
+                            child: FutureBuilder(
+                                future: _prescriptionService.formPrescriptionServiceList(),
+                                builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                  if(snapshot.hasData){
+                                    int length = 0;
+                                    for(var i = 0; i<snapshot.data['data'].length; i ++ ){
+                                      if(snapshot.data['data'][i]['status'] == 'Confirmed'){
+                                        length += 1;
+                                      }
+                                    }
+                                    return DashboardBox(length, "Accept", customColor.confirmColor);
+                                  }else{
+                                    return DashboardBox(0, "Accept", customColor.confirmColor);
+                                  }
+
+                                }
+                            ),
                           )
                       ),
 
@@ -285,7 +320,23 @@ class _HomeScreenState extends State<HomeScreen>  {
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=> CancelPrescriotionList()));
                             },
-                            child: DashboardBox("1", "Canceled", customColor.cancelColor),
+                            child: FutureBuilder(
+                                future: _prescriptionService.formPrescriptionServiceList(),
+                                builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                  if(snapshot.hasData){
+                                    int length = 0;
+                                    for(var i = 0; i<snapshot.data['data'].length; i ++ ){
+                                      if(snapshot.data['data'][i]['status'] == 'Canceled'){
+                                        length += 1;
+                                      }
+                                    }
+                                    return DashboardBox(length, "Canceled", customColor.cancelColor);
+                                  }else{
+                                    return DashboardBox(0, "Canceled", customColor.cancelColor);
+                                  }
+
+                                }
+                            ),
                           )
                       ),
                     ],
@@ -339,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen>  {
 
 
 class DashboardBox extends StatelessWidget {
-  String Number;
+  int Number;
   String Value;
   dynamic color;
   DashboardBox(this.Number, this.Value, this.color);
@@ -357,7 +408,6 @@ class DashboardBox extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:  [
-
               Text("${Number}",
                 style: const TextStyle(
                     fontSize: 35,
@@ -365,7 +415,6 @@ class DashboardBox extends StatelessWidget {
                     fontWeight: FontWeight.bold
                 ),
               ),
-
               Text(Value,
                 style:const TextStyle(
                     fontSize: 25,

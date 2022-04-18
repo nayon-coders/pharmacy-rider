@@ -87,13 +87,13 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
                             title: const Text('Are You Sure? '),
-                            content:   Text('You Want to Add More Product.?'),
+                            content:   Text('Already added product. You Want to Add More Product.?'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=> Addproduct( PID: widget.id,)));
                                 },
-                                child: Text("Ok"),
+                                child: const Text("Yes.! I do"),
                               )
 
                             ],

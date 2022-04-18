@@ -82,17 +82,7 @@ class _DeliveryOrdersListState extends State<DeliveryOrdersList> {
         ),
       ),
 
-        bottomNavigationBar: Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-            child: Text("Total Amount: $tt",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20
-              ),
-            ),
-          ),
-        )
+
     );
 
   }
