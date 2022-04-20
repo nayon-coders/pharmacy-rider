@@ -66,7 +66,7 @@ bool _isLoding = false;
                               itemBuilder: (context, index){
                                 _qty.add(new TextEditingController());
                                 var images = snapshot.data['data'][index]['product_images'][0]["file_path"];
-                                String name = snapshot.data['data'][index]['name'];
+                                String name = snapshot.data['data'].length.toString();
                                 String gName = snapshot.data['data'][index]['generic_name'];
                                 String brand = snapshot.data['data'][index]['brand']['name'];
                                 if(_search.text.isEmpty){

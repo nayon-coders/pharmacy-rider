@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class DashboardBox extends StatelessWidget {
-  double Number;
+  int Number;
   String Value;
   dynamic color;
   DashboardBox(this.Number, this.Value, this.color);

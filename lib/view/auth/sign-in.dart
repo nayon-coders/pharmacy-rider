@@ -173,7 +173,7 @@ class _SignInState extends State<SignIn>  with TickerProviderStateMixin {
       //Store Data
        localStorage.setString('token', body['access_token']);
        localStorage.setString('user', jsonEncode(body['user']));
-       Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+       Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
 
     }else{
       ScaffoldMessenger.of(context).showSnackBar(

@@ -39,10 +39,13 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
                     builder: (context, AsyncSnapshot<dynamic> snapshot){
                       if(snapshot.hasData){
                         return ListView.builder(
+                          scrollDirection: Axis.vertical,
                             itemCount: snapshot.data['data'].length,
                             itemBuilder: (context, index){
                               print(snapshot.data['data'][index]["file"]);
                               return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
                                   child: Image(
                                     image: NetworkImage("${ApiServise.siteUrl}"+"${snapshot.data['data'][index]["file"]}"),
                                     width: MediaQuery.of(context).size.width,

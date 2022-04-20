@@ -10,4 +10,6 @@ class ApiServise{
   static const String products = baseUrl+"/products";
   static const String UpPrescriptionStatus = baseUrl+"admin/orders/"; //set default "5/change-status"
   static const String requisitionsListFile = "/requisition-files";
+  static const String UserAttendance = baseUrl+"/admin/attendance";
+  static const String AttendanceUpdate = baseUrl+"/admin/attendance/store";
 }

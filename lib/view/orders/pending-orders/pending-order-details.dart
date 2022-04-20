@@ -40,31 +40,19 @@ bool _isCancel = false;
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: FutureBuilder(
-
               future: _orderService.fromOrdersDetails("${widget.OrderId}"),
                 builder: (context, AsyncSnapshot<dynamic> snapshot){
-                  if(!snapshot.hasData){
-                    return  const Padding(
-                      padding: EdgeInsets.only(top: 150),
-                      child: SpinKitCircle(
-                        color: customColor.primaryColor,
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  }else{
-                    amount = double.parse(snapshot.data['data']['amount']);
-                    shipping = double.parse(snapshot.data['data']['shipping']);
-                    totalAmount = amount + shipping;
+                  if(snapshot.hasData){
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                         Text("Order Id: ${snapshot.data['data']['order_number ']}",
+                        Text("Order Id: ${snapshot.data['data']['order_number ']}",
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
                           ),
                         ),
-                         Text("Date: ${snapshot.data['data']['date']}",
+                        Text("Date: ${snapshot.data['data']['date']}",
                           style: const TextStyle(
                             fontSize: 13,
                           ),
@@ -96,12 +84,12 @@ bool _isCancel = false;
                         const SizedBox(height: 30,),
                         //product information
                         const Center(
-                            child: Text("Product Info",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
+                          child: Text("Product Info",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -109,10 +97,10 @@ bool _isCancel = false;
                             SizedBox(
                               width: MediaQuery.of(context).size.width / 3,
                               child: const Text("Name",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                )
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  )
                               ),
                             ),
                             SizedBox(
@@ -210,7 +198,7 @@ bool _isCancel = false;
                               );
                             }),
 
-                         Divider(color: Colors.grey, height: 2,),
+                        Divider(color: Colors.grey, height: 2,),
                         //total
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -268,6 +256,20 @@ bool _isCancel = false;
                           ],
                         ),
                       ],
+                    );
+
+                  }else if(snapshot.connectionState == ConnectionState.waiting){
+                    return  const Padding(
+                      padding: EdgeInsets.only(top: 150),
+                      child: SpinKitCircle(
+                        color: customColor.primaryColor,
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  }else{
+                    return  const Padding(
+                      padding: EdgeInsets.only(top: 150),
+                      child: Center(child: Text("No Data Found")),
                     );
                   }
                 }

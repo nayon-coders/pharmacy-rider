@@ -6,8 +6,10 @@ import 'package:pharmacy_rider_apps/Utility/colors.dart';
 import 'package:pharmacy_rider_apps/services/api-service.dart';
 import 'package:pharmacy_rider_apps/services/orders.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
+import 'package:pharmacy_rider_apps/view/home-screen/widget/card-box-rows-widget-dart.dart';
 import 'package:pharmacy_rider_apps/view/orders/order-reports/daily-reports.dart';
 import 'package:pharmacy_rider_apps/view/orders/order-reports/search-order-reports.dart';
+import 'package:pharmacy_rider_apps/view/orders/order-reports/widgets/pie-chart-widget.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,8 +54,8 @@ TextEditingController _controllerSearch = TextEditingController();
           children: [
             GestureDetector(
               onTap: (){
-               Navigator.push(context, MaterialPageRoute(
-                   builder: (context)=>DailyReports()));
+                _DatePicker();
+
               },
               child: Container(
                 padding: const EdgeInsets.all(10),
@@ -62,7 +64,7 @@ TextEditingController _controllerSearch = TextEditingController();
                 color: Colors.blue,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text("Filter By Date",
                       style: TextStyle(
                         fontSize: 18,
@@ -87,155 +89,18 @@ TextEditingController _controllerSearch = TextEditingController();
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         child: Column(
                           children: [
-                            PieChart(
-                              dataMap: const {
-                                "Pending" : 100,
-                                "Accept" : 100,
-                                "Canceled" : 100,
-                                "Delivered" : 100,
-                              },
-                              colorList: const [
-                                customColor.pendingColor,
-                                Colors.green,
-                                customColor.confirmColor,
-                                customColor.cancelColor,
-                              ],
-                              animationDuration: const Duration(seconds: 1),
-                              chartType: ChartType.ring,
-                              chartValuesOptions: const ChartValuesOptions(
-                                showChartValuesInPercentage: true,
-                              ),
-                            ),
-                            const SizedBox(height: 30,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // pending orders count
-                                Expanded(
-                                    flex: 2,
-                                    child: InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context)=>PendingOrders()));
-                                      },
-                                      child: FutureBuilder(
-                                          future: _allOrders.fromOrders(),
-                                          builder: (context, AsyncSnapshot<dynamic> snapshot){
-                                            if(snapshot.hasData){
-                                              int length = 0;
-                                              for(var i = 0; i<snapshot.data['data'].length; i ++ ){
-                                                if(snapshot.data['data'][i]['status'] == 'Pending'){
-                                                  length += 1;
-                                                }
-                                              }
-                                              return DashboardBox(length, "Pending", customColor.pendingColor);
-                                            }else{
-                                              return DashboardBox(0, "Pending", customColor.pendingColor);
-                                            }
-
-                                          }
-                                      ),
-                                    )
-                                ),
+                           //Pei chart
+                            PeiChartWidget(),
+                            //Pei chart
 
 
-                                SizedBox(width: 10,),
-                                //processing order count
-                                Expanded(
-                                    flex: 2,
-                                    child: InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context)=>const acpectOrders()));
-                                      },
-                                      child: FutureBuilder(
-                                          future: _allOrders.fromOrders(),
-                                          builder: (context, AsyncSnapshot<dynamic> snapshot){
-                                            if(snapshot.hasData){
-                                              int ConfiremdOrdersLength = 0;
-                                              for(var i = 0; i<snapshot.data['data'].length; i ++ ){
-                                                if(snapshot.data['data'][i]['status'] == 'Processing'){
-                                                  ConfiremdOrdersLength += 1;
-                                                }
-                                              }
-                                              return DashboardBox(ConfiremdOrdersLength, "Accept", Colors.green);
-                                            }else{
-                                              return DashboardBox(0, "Pending", customColor.pendingColor);
-                                            }
 
-                                          }
-                                      ),
-                                    )
-                                ),
-
-                              ],
-                            ),
-                            SizedBox(height: 10,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                //confirmed order count
-                                Expanded(
-                                    flex: 2,
-                                    child: InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryOrdersList()));
-                                      },
-                                      child: FutureBuilder(
-                                          future: _allOrders.fromOrders(),
-                                          builder: (context, AsyncSnapshot<dynamic> snapshot){
-                                            if(snapshot.hasData){
-                                              int length = 0;
-                                              for(var i = 0; i<snapshot.data['data'].length; i ++ ){
-                                                if(snapshot.data['data'][i]['status'] == 'Delivered'){
-                                                  length += 1;
-                                                }
-                                              }
-                                              return DashboardBox(length, "Delivered", customColor.confirmColor);
-                                            }else{
-                                              return DashboardBox(0, "Delivered", customColor.confirmColor);
-                                            }
-
-                                          }
-                                      ),
-                                    )
-                                ),
-
-
-                                SizedBox(width: 10,),
-                                //cancel order count
-                                Expanded(
-                                    flex: 2,
-                                    child: InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CancelOrdersList()));
-                                      },
-                                      child: FutureBuilder(
-                                          future: _allOrders.fromOrders(),
-                                          builder: (context, AsyncSnapshot<dynamic> snapshot){
-                                            if(snapshot.hasData){
-                                              int length = 0;
-                                              for(var i = 0; i<snapshot.data['data'].length; i ++ ){
-                                                if(snapshot.data['data'][i]['status'] == 'Canceled'){
-                                                  length += 1;
-                                                }
-                                              }
-                                              return DashboardBox(length, "Canceled", customColor.cancelColor);
-                                            }else{
-                                              return DashboardBox(0, "Canceled", customColor.cancelColor);
-                                            }
-
-                                          }
-                                      ),
-                                    )
-                                ),
-                              ],
-                            ),
+                            OrderLengthRows(),
                           ],
                         ),
                       );
                 }else if(snapshot.connectionState == ConnectionState.waiting){
-                  return Center(
+                  return const Center(
                     child: SpinKitCircle(
                       color: customColor.primaryColor,
                       duration: Duration(seconds: 1),
@@ -289,7 +154,9 @@ TextEditingController _controllerSearch = TextEditingController();
         ).then((value){
           if(value != null){
             PickDate = dateFormat.format(value);
-            print(PickDate);
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context)=>DailyReports(currentData: PickDate)));
+
           }
 
 

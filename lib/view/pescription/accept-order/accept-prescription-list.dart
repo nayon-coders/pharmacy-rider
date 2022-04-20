@@ -91,7 +91,7 @@ class PrescrptionList extends StatelessWidget {
                 Text("Id#: ${PerscriptionID}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 13,
                   ),
                 ),
 

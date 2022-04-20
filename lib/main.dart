@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Poppins',
         primaryColor: customColor.primaryColor,
       ),
-      home: _isuserLogin ? HomeScreen() : SignIn(),
+      home: _isuserLogin ? const HomeScreen() : const SignIn(),
     );
   }
 }
