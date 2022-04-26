@@ -200,24 +200,6 @@ bool _isCancel = false;
 
                         Divider(color: Colors.grey, height: 2,),
                         //total
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            const Text("Sub Total:",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const SizedBox(width: 5,),
-                            Text(snapshot.data['data']['amount'],
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -247,10 +229,10 @@ bool _isCancel = false;
                               ),
                             ),
                             const SizedBox(width: 5,),
-                            Text(totalAmount.toString(),
+                            Text(snapshot.data['data']['amount'],
                               style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                               ),
                             ),
                           ],
@@ -301,13 +283,20 @@ bool _isCancel = false;
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                           title: const Text('Are You Sure? '),
-                          content:  Text('You Want to Cancel This Order.?'),
+                          content:  const Text('You Want to Cancel This Order.?'),
                           actions: <Widget>[
                             TextButton(
                               onPressed: (){
-                                _Cancel("${widget.OrderId}");
+                                print(widget.OrderId);
+                                _Cancel(widget.OrderId);
                               },
-                              child: Text("Ok"),
+                              child: const Text("Ok"),
+                            ),
+                            TextButton(
+                              onPressed: (){
+                                Navigator.pop(context);
+                              },
+                              child: const Text("No"),
                             )
 
                           ],
@@ -316,7 +305,7 @@ bool _isCancel = false;
 
                     },
                     color: customColor.cancelColor,
-                    child: Text("Cancel", style: TextStyle(color: Colors.white),),
+                    child: const Text("Cancel", style: TextStyle(color: Colors.white),),
                   )
               ),
 
@@ -350,20 +339,19 @@ bool _isCancel = false;
 
 
 void _Cancel(String OrderId) async{
-
-
-
   setState(() {
+    //print(OrderId);
     _isCancel = true;
   });
   var OrderStatus = {
-    "status":"Cancel",
+    "status": "Canceled"
   };
 
   var response = await UpdateService().UpdateData(OrderStatus, OrderId);
   var body = jsonDecode(response.body.toString());
+  print(response.statusCode );
   if(response.statusCode == 200){
-
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomeScreen()));
   }else{
     print("error");
   }

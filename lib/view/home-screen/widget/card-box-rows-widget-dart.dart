@@ -39,6 +39,9 @@ class OrderLengthRows extends StatelessWidget {
                             }
                           }
                           return DashboardBox(length.toInt(), "Pending", customColor.pendingColor);
+                        }else if(snapshot.connectionState == ConnectionState.waiting){
+                          return Center(child:
+                          SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
                         }else{
                           return DashboardBox(0, "Pending", customColor.pendingColor);
                         }
@@ -69,6 +72,9 @@ class OrderLengthRows extends StatelessWidget {
                             }
                           }
                           return DashboardBox(length.toInt(), "Accept", Colors.green);
+                        }else if(snapshot.connectionState == ConnectionState.waiting){
+                          return Center(child:
+                          SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
                         }else{
                           return DashboardBox(0, "Pending", customColor.pendingColor);
                         }
@@ -102,6 +108,9 @@ class OrderLengthRows extends StatelessWidget {
                             }
                           }
                           return DashboardBox(length.toInt(), "Delivered", customColor.confirmColor);
+                        }else if(snapshot.connectionState == ConnectionState.waiting){
+                          return Center(child:
+                          SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
                         }else{
                           return DashboardBox(0, "Delivered", customColor.confirmColor);
                         }
@@ -131,6 +140,9 @@ class OrderLengthRows extends StatelessWidget {
                             }
                           }
                           return DashboardBox(length.toInt(), "Canceled", customColor.cancelColor);
+                        }else if(snapshot.connectionState == ConnectionState.waiting){
+                          return Center(child:
+                          SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
                         }else{
                           return DashboardBox(0, "Canceled", customColor.cancelColor);
                         }

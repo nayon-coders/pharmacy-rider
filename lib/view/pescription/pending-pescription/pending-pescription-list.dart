@@ -29,20 +29,9 @@ class _PendingPescriotionListState extends State<PendingPescriotionList> {
                 child: FutureBuilder(
                   future: p_rescriptionService.formPrescriptionServiceList(),
                     builder: (context, AsyncSnapshot<dynamic> snapshot){
-                      if(snapshot.hasData){
-                        return ListView.builder(
-                            itemCount: snapshot.data['data'].length,
-                            itemBuilder: (context, index){
-                                if(snapshot.data['data'][index]['status'] == 'Pending'){
-                                  return PrescrptionList(
-                                    PerscriptionID: "${snapshot.data['data'][index]['rq_code ']}",
-                                    id: "${snapshot.data['data'][index]['id']}",
-                                    status: '${snapshot.data['data'][index]['status']}',);
-                                }else{
-                                  return Center();
-                                }
-                              }
-
+                      if(!snapshot.hasData){
+                        return Center(
+                          child: Text("No Data Found"),
                         );
 
                       }else if(snapshot.connectionState == ConnectionState.waiting){
@@ -53,10 +42,21 @@ class _PendingPescriotionListState extends State<PendingPescriotionList> {
                           ),
                         );
                       }else{
+                        return ListView.builder(
+                            itemCount: snapshot.data['data'].length,
+                            itemBuilder: (context, index){
+                              if(snapshot.data['data'][index]['status'] == 'Pending'){
+                                return PrescrptionList(
+                                  PerscriptionID: "${snapshot.data['data'][index]['rq_code ']}",
+                                  id: "${snapshot.data['data'][index]['id']}",
+                                  status: '${snapshot.data['data'][index]['status']}',);
+                              }else{
+                                return Center();
+                              }
+                            }
 
-                        return Center(
-                          child: Text("No Data Found"),
                         );
+
                       }
                     }
                 ),
@@ -83,24 +83,27 @@ class PrescrptionList extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Id#: ${PerscriptionID}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
+            Container(
+              width: MediaQuery.of(context).size.width / 1.6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Id#: ${PerscriptionID}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
                   ),
-                ),
 
 
-                Text("Status: $status",
-                  style: TextStyle(
-                    fontSize: 15,
+                  Text("Status: $status",
+                    style: TextStyle(
+                      fontSize: 15,
 
-                  ),
-                )
-              ],
+                    ),
+                  )
+                ],
+              ),
             ),
             GestureDetector(
               onTap: (){

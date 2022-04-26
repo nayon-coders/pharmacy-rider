@@ -25,12 +25,27 @@ class _AttendanceState extends State<Attendance> {
   //current date
   DateTime date = DateTime.now();
 
+
   //
 
   late bool _isTimeIn = false;
   late bool _isTimeOut = false;
-
-
+var userData;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _UserInfo();
+  }
+  void _UserInfo() async{
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    //Store Data
+    var userJson = localStorage.getString('user');
+    var user = jsonDecode(userJson!);
+    setState(() {
+      userData =user;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +78,7 @@ class _AttendanceState extends State<Attendance> {
                     future: _attendanceDetails.fromAttendance(),
                     builder: (context, AsyncSnapshot<dynamic> snapshot){
                       if(!snapshot.hasData){
-                        return const Center(child: Text(""));
+                        return const Center();
                       }else if(snapshot.connectionState == ConnectionState.waiting){
                         return const Center(
                           child: SpinKitCircle(
@@ -72,22 +87,101 @@ class _AttendanceState extends State<Attendance> {
                           ),
                         );
                       }else{
-                        //user attendance
-                        //for(var i = 0; i > snapshot.data['data'].length; i++) {
-                          if(snapshot.data['data'].length < 0) {
-                               _isTimeIn = true;
-                               _isTimeOut = true;
-                            return const Center();
-
-                          } else if(snapshot.data['data']['date'] != dateFormat.format(date)) {
-                            _isTimeIn = false;
-                            _isTimeOut = false;
+                        if(snapshot.data['data'].length == 0) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  _ClockingIn();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFF051C4B),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 15),
+                                    textStyle: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                child: Text("Check In",),
+                              ),
+                              ElevatedButton(
+                                onPressed: null,
+                                style: ElevatedButton.styleFrom(
+                                    primary: const Color(0xFFFF5630),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 15),
+                                    textStyle: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                child: const Text("Check Out",),
+                              ),
+                            ],
+                          );
+                        }else{
+                          if (snapshot.data['data']["time"] != null ) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: null,
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Color(0xFF051C4B),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 15),
+                                      textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  child: Text("Check In",),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _CheckOut();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      primary: const Color(0xFFFF5630),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 15),
+                                      textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  child: const Text("Check Out",),
+                                ),
+                              ],
+                            );
                           } else {
-                          _isTimeIn = true;
-                          _isTimeOut = true;
-                          return const Center();
-
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: null,
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Color(0xFF051C4B),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 15),
+                                      textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  child: Text("Check In",),
+                                ),
+                                ElevatedButton(
+                                  onPressed: null,
+                                  style: ElevatedButton.styleFrom(
+                                      primary: const Color(0xFFFF5630),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 15),
+                                      textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  child: const Text("Check Out",),
+                                ),
+                              ],
+                            );
                           }
+
+
+                        }
 
 
                         // }//end for
@@ -98,43 +192,10 @@ class _AttendanceState extends State<Attendance> {
               ),
               /////// end future builder /////////
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment
-                    .spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: _isTimeIn == true ? null: () {
-                      _ClockingIn();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF051C4B),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 15),
-                        textStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                    child: Text("Check In",),
-                  ),
-                  ElevatedButton(
-                    onPressed: _isTimeOut == true ? null : (){
-                      _CheckOut();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        primary: Color(0xFFFF5630),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 15),
-                        textStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                    child: Text("Check Out",),
-                  ),
-                ],
-              ),
-
               SizedBox(height: 40,),
 
-              Text("Courrent Time",
-                style: const TextStyle(
+              const Text("Courrent Time",
+                style: TextStyle(
                   color: Color(0xFF051C4B),
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -170,7 +231,7 @@ class _AttendanceState extends State<Attendance> {
   if(response.statusCode == 200){
     setState(() {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
               content: Text("You are checking", ),
             backgroundColor: Color(0xFF051C4B),
           ));
@@ -178,13 +239,12 @@ class _AttendanceState extends State<Attendance> {
   }else{
     setState(() {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("You are already in. Next Day Try again.", ),
-            backgroundColor: Color(0xFFFA0202),
+          const SnackBar(
+            content: Text("You are already in", ),
+            backgroundColor: Color(0xFF051C4B),
           ));
     });
   }
-
 
 
   }
@@ -210,17 +270,17 @@ class _AttendanceState extends State<Attendance> {
     if(response.statusCode == 200){
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("You are already in. Next Day Try again.", ),
+            const SnackBar(
+              content: Text("Check out success", ),
               backgroundColor: Color(0xFFE63F31),
             ));
       });
     }else{
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("You are already in.", ),
-              backgroundColor: Color(0xFFFA0202),
+            const SnackBar(
+              content: Text("You are already in", ),
+              backgroundColor: Color(0xFFE63F31),
             ));
       });
     }

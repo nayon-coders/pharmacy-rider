@@ -31,7 +31,19 @@ class _CancelPrescriptionListState extends State<CancelPrescriotionList> {
               child: FutureBuilder(
                   future: _prescriptionService.formPrescriptionServiceList(),
                   builder: (context, AsyncSnapshot<dynamic> snapshot){
-                    if(snapshot.hasData){
+                    if(!snapshot.hasData){
+                      return Center(
+                        child: Text("No Data Found"),
+                      );
+
+                    }else if(snapshot.connectionState == ConnectionState.waiting){
+                      return Center(
+                        child: SpinKitCircle(
+                          color: customColor.primaryColor,
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    }else{
                       return ListView.builder(
                           itemCount: snapshot.data['data'].length,
                           itemBuilder: (context, index){
@@ -48,18 +60,6 @@ class _CancelPrescriptionListState extends State<CancelPrescriotionList> {
 
                       );
 
-                    }else if(snapshot.connectionState == ConnectionState.waiting){
-                      return Center(
-                        child: SpinKitCircle(
-                          color: customColor.primaryColor,
-                          duration: Duration(seconds: 1),
-                        ),
-                      );
-                    }else{
-
-                      return Center(
-                        child: Text("No Data Found"),
-                      );
                     }
                   }
               ),
@@ -86,30 +86,33 @@ class PrescrptionList extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Id#: ${PerscriptionID}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
+            Container(
+              width: MediaQuery.of(context).size.width / 1.6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Id#: ${PerscriptionID}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                    ),
                   ),
-                ),
 
 
-                Text("Notes: $note",
-                  style: TextStyle(
-                    fontSize: 15,
+                  Text("Notes: $note",
+                    style: TextStyle(
+                      fontSize: 15,
 
+                    ),
                   ),
-                ),
-                Text("Status: $status",
-                  style: TextStyle(
-                    fontSize: 15,
+                  Text("Status: $status",
+                    style: TextStyle(
+                      fontSize: 15,
 
-                  ),
-                )
-              ],
+                    ),
+                  )
+                ],
+              ),
             ),
             GestureDetector(
               onTap: (){

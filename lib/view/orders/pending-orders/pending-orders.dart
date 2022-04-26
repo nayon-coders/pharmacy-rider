@@ -44,7 +44,7 @@ class _PendingOrdersState extends State<PendingOrders> {
                           return OrderList(
                             orderId: snapshot.data['data'][index]['order_number '].toString(),
                             date: snapshot.data['data'][index]['date'].toString(),
-                            OrderId: snapshot.data['data'][index]['id'].toString(),
+                            id: snapshot.data['data'][index]['id'].toString(),
                           );
                         }else{
                           return Center();
@@ -80,8 +80,8 @@ class _PendingOrdersState extends State<PendingOrders> {
 }
 
 class OrderList extends StatelessWidget {
-  final String orderId, date, OrderId;
-  OrderList({required this.orderId, required this.date, required this.OrderId});
+  final String orderId, date, id;
+  OrderList({required this.orderId, required this.date, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +112,7 @@ class OrderList extends StatelessWidget {
             GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>PendingOrderDetails(OrderId: OrderId)));
+                    builder: (context)=>PendingOrderDetails(OrderId: id)));
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

@@ -85,23 +85,26 @@ class PrescrptionList extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Id#: ${PerscriptionID}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
+            Container(
+              width: MediaQuery.of(context).size.width / 1.6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Id#: ${PerscriptionID}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
                   ),
-                ),
 
-                Text("Status: $status",
-                  style: TextStyle(
-                    fontSize: 15,
+                  Text("Status: $status",
+                    style: TextStyle(
+                      fontSize: 15,
 
-                  ),
-                )
-              ],
+                    ),
+                  )
+                ],
+              ),
             ),
             GestureDetector(
               onTap: (){

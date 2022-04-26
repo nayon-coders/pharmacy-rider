@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
+import 'package:pharmacy_rider_apps/services/attendance-service.dart';
 import 'package:pharmacy_rider_apps/services/auth.dart';
 import 'package:pharmacy_rider_apps/services/orders.dart';
 import 'package:pharmacy_rider_apps/services/prescription-service.dart';
@@ -51,13 +52,13 @@ void _UserInfo() async{
   Widget build(BuildContext context) {
     AllOrders _allOrders = AllOrders();
     PrescriptionService _prescriptionService = PrescriptionService();
-
+    AttandenceDetails _attendanceDetails = AttandenceDetails();
     return RefreshIndicator(
       onRefresh: ()async{
-        await _allOrders.fromOrders();
-        await _prescriptionService.formPrescriptionServiceList();
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
       },
       child: Scaffold(
+
         body:SingleChildScrollView(
           child: _isLogout != true
               ? Padding(
@@ -73,21 +74,94 @@ void _UserInfo() async{
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child:  Image.asset("assets/images/user.jpg", height: 40, width: 40,),
-                                ),
-                                const SizedBox(width: 10,),
-                                Text("${userData!['name']}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
-                                    fontSize: 22,
-                                  ),),
-                              ],
+                            FutureBuilder(
+                              future: _attendanceDetails.fromAttendance(),
+                              builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                if(!snapshot.hasData){
+                                  return const Center(child: Text(""));
+                                }else if(snapshot.connectionState == ConnectionState.waiting){
+                                  return const Center(
+                                    child: SpinKitCircle(
+                                      color: customColor.primaryColor,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                }else{
+                                  if(snapshot.data['data'].length != 0) {
+                                    if(snapshot.data['data']['time_out'] == null){
+                                      return Row(
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius: BorderRadius
+                                                    .circular(100),
+                                                child: Image.asset(
+                                                  "assets/images/user.jpg",
+                                                  height: 40, width: 40,),
+                                              ),
+                                              Positioned(
+                                                right: 0,
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius
+                                                      .circular(100),
+                                                  child: Image.asset(
+                                                    "assets/images/active.png",
+                                                    height: 15, width: 15,),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 10,),
+                                          Text("${userData!['name']}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black87,
+                                              fontSize: 22,
+                                            ),),
+                                        ],
+                                      );
+                                    }
+                                    return Row(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                          child: Image.asset( "assets/images/user.jpg", height: 40, width: 40,),),
+                                        const SizedBox(width: 10,),
+                                        Text("${userData!['name']}",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black87,
+                                            fontSize: 22,
+                                          ),),
+                                      ],
+                                    );
+
+                                  }else{
+                                    return Row(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                          child: Image.asset("assets/images/user.jpg",height: 40, width: 40,),
+                                        ),
+                                        const SizedBox(width: 10,),
+                                        Text("${userData!['name']}",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black87,
+                                            fontSize: 22,
+                                          ),),
+                                      ],
+                                    );
+                                  }
+
+
+                                  // }//end for
+                                  return Text("");
+                                }
+                              },
                             ),
+
                             IconButton(
                                 onPressed: (){
                                   setState(() {
@@ -138,7 +212,7 @@ void _UserInfo() async{
                       ),
                     ),
                     //Order Length....
-                    OrderLengthRows(),
+                    const OrderLengthRows(),
                     //Order Length....
 
                     const SizedBox(height: 20,),
@@ -152,8 +226,8 @@ void _UserInfo() async{
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 "Order Reports",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -199,6 +273,9 @@ void _UserInfo() async{
                                         }
                                       }
                                       return DashboardBox(length.toInt(), "Pending", customColor.pendingColor);
+                                    }else if(snapshot.connectionState == ConnectionState.waiting){
+                                      return Center(child:
+                                      SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
                                     }else{
                                       return DashboardBox(0, "Pending", customColor.pendingColor);
                                     }
@@ -225,6 +302,9 @@ void _UserInfo() async{
                                         }
                                       }
                                       return DashboardBox(length.toInt(), "Accept", customColor.confirmColor);
+                                    }else if(snapshot.connectionState == ConnectionState.waiting){
+                                      return Center(child:
+                                      SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
                                     }else{
                                       return DashboardBox(0, "Accept", customColor.confirmColor);
                                     }
@@ -257,6 +337,9 @@ void _UserInfo() async{
                                         }
                                       }
                                       return DashboardBox(length.toInt(), "Canceled", customColor.cancelColor);
+                                    }else if(snapshot.connectionState == ConnectionState.waiting){
+                                      return Center(child:
+                                      SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
                                     }else{
                                       return DashboardBox(0, "Canceled", customColor.cancelColor);
                                     }

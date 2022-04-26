@@ -8,6 +8,7 @@ import 'package:pharmacy_rider_apps/services/add-product-service.dart';
 import 'package:pharmacy_rider_apps/services/all-product-service.dart';
 import 'package:pharmacy_rider_apps/services/api-service.dart';
 import 'package:pharmacy_rider_apps/services/auth-useri.dart';
+import 'package:pharmacy_rider_apps/view/pescription/add-product/searchproduct.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class Addproduct extends StatefulWidget {
@@ -19,7 +20,7 @@ class Addproduct extends StatefulWidget {
 }
 
 class _AddproductState extends State<Addproduct> {
-bool _isLoding = false;
+  bool _isLoding = false;
    late String productId;
   //controller
   TextEditingController _search = TextEditingController();
@@ -36,23 +37,38 @@ bool _isLoding = false;
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Column(
           children: [
-            TextFormField(
-              onChanged: (value){
-                setState(() {
 
-                });
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchProduct(PresID: widget.PID,)));
               },
-              controller: _search,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 10),
-                hintText: "Search Product....",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(width: 1,),
-                ),
-                prefixIcon: Icon(Icons.search)
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(width: 1, color: Colors.green)
+                    ),
+                    child: const Text("Search Product......")
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
               ),
             ),
-            SizedBox(height: 15,),
+            const SizedBox(height: 15,),
 
 
             //show product....
@@ -69,143 +85,39 @@ bool _isLoding = false;
                                 String name = snapshot.data['data'].length.toString();
                                 String gName = snapshot.data['data'][index]['generic_name'];
                                 String brand = snapshot.data['data'][index]['brand']['name'];
-                                if(_search.text.isEmpty){
-                                  return ListTile(
-                                      leading: FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: "${ApiServise.siteUrl+"/"+images}",
-                                      ),
-                                      title: Text("${name}"),
-                                      subtitle: Column(
-                                        children: [
-                                          Text("Generic name: ${gName}"),
-                                          Text("Brand: ${brand}"),
-                                          TextFormField(
-                                            controller: _qty[index],
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.only(left: 10),
-                                              hintText: "Qty",
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(width: 1,),
-                                              ),
+                                return ListTile(
+                                    leading: FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: "${ApiServise.siteUrl+"/"+images}",
+                                    ),
+                                    title: Text("${name}"),
+                                    subtitle: Column(
+                                      children: [
+                                        Text("Generic name: ${gName}"),
+                                        Text("Brand: ${brand}"),
+                                        TextFormField(
+                                          controller: _qty[index],
+                                          decoration: InputDecoration(
+                                            contentPadding: const EdgeInsets.only(left: 10),
+                                            hintText: "Qty",
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(width: 1,),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      trailing:  GestureDetector(
-                                        onTap: (){
-                                          _addProduct(snapshot.data['data'][index]['id'], index);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          color: Colors.green,
-                                          child: Icon(Icons.add, color: Colors.white,),
                                         ),
-                                      )
-                                  );
-                                }else if(name.toLowerCase().contains(_search.text.toLowerCase())){
-                                  return ListTile(
-                                      leading: FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: "${ApiServise.siteUrl+"/"+images}",
+                                      ],
+                                    ),
+                                    trailing:  GestureDetector(
+                                      onTap: (){
+                                        _addProduct(snapshot.data['data'][index]['id'],index);
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        color: Colors.green,
+                                        child: Icon(Icons.add, color: Colors.white,),
                                       ),
-                                      title: Text("${name}"),
-                                      subtitle: Column(
-                                        children: [
-                                          Text("Generic name: ${gName}"),
-                                          Text("Brand: ${brand}"),
-                                          TextFormField(
-                                            controller: _qty[index],
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.only(left: 10),
-                                              hintText: "Qty",
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(width: 1,),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      trailing:  GestureDetector(
-                                        onTap: (){
-                                          _addProduct(snapshot.data['data'][index]['id'],index);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          color: Colors.green,
-                                          child: Icon(Icons.add, color: Colors.white,),
-                                        ),
-                                      )
-                                  );
-                                }else if(brand.toLowerCase().contains(_search.text.toLowerCase())){
-                                  return ListTile(
-                                      leading: FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: "${ApiServise.siteUrl+"/"+images}",
-                                      ),
-                                      title: Text("${name}"),
-                                      subtitle: Column(
-                                        children: [
-                                          Text("Generic name: ${gName}"),
-                                          Text("Brand: ${brand}"),
-                                          TextFormField(
-                                            controller: _qty[index],
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.only(left: 10),
-                                              hintText: "Qty",
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(width: 1,),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      trailing:  GestureDetector(
-                                        onTap: (){
-                                          _addProduct(snapshot.data['data'][index]['id'], index);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          color: Colors.green,
-                                          child: Icon(Icons.add, color: Colors.white,),
-                                        ),
-                                      )
-                                  );
-                                }else if(gName.toLowerCase().contains(_search.text.toLowerCase())){
-                                  return ListTile(
-                                      leading: FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: "${ApiServise.siteUrl+"/"+images}",
-                                      ),
-                                      title: Text("${name}"),
-                                      subtitle: Column(
-                                        children: [
-                                          Text("Generic name: ${gName}"),
-                                          Text("Brand: ${brand}"),
-                                          TextFormField(
-                                            controller: _qty[index],
-                                            decoration: InputDecoration(
-                                              contentPadding: const EdgeInsets.only(left: 10),
-                                              hintText: "Qty",
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(width: 1,),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      trailing:  GestureDetector(
-                                        onTap: (){
-                                          _addProduct(snapshot.data['data'][index]['id'],index);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          color: Colors.green,
-                                          child: Icon(Icons.add, color: Colors.white,),
-                                        ),
-                                      )
-                                  );
-                                }
+                                    )
+                                );
                                 return Container();
                               }
                           );

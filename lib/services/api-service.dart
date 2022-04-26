@@ -12,4 +12,5 @@ class ApiServise{
   static const String requisitionsListFile = "/requisition-files";
   static const String UserAttendance = baseUrl+"/admin/attendance";
   static const String AttendanceUpdate = baseUrl+"/admin/attendance/store";
+  static const String SarchProduct = baseUrl+"/search";
 }
