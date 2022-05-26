@@ -42,30 +42,14 @@ class _AddproductState extends State<Addproduct> {
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchProduct(PresID: widget.PID,)));
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 1.3,
-                    padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                    decoration: BoxDecoration(
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                  decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(width: 1, color: Colors.green)
-                    ),
-                    child: const Text("Search Product......")
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(5)
-                    ),
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                  )
-                ],
+                  child: const Text("Search Product......")
               ),
             ),
             const SizedBox(height: 15,),
@@ -81,10 +65,31 @@ class _AddproductState extends State<Addproduct> {
                               itemCount: snapshot.data['data'].length,
                               itemBuilder: (context, index){
                                 _qty.add(new TextEditingController());
-                                var images = snapshot.data['data'][index]['product_images'][0]["file_path"];
-                                String name = snapshot.data['data'].length.toString();
-                                String gName = snapshot.data['data'][index]['generic_name'];
-                                String brand = snapshot.data['data'][index]['brand']['name'];
+                                String gName;
+                                var images;
+                                String name;
+                                String brand;
+                                _qty.add(TextEditingController());
+                                if(snapshot.data['data'][index]['product_images'][0]["file_path"] != null){
+                                  images = snapshot.data['data'][index]['product_images'][0]["file_path"];
+                                }else{
+                                  images = "N/A";
+                                }
+                                if(snapshot.data['data'][index]['name'] != null){
+                                  name = snapshot.data['data'][index]['name'];
+                                }else{
+                                  name = "N/A";
+                                }
+                                if(snapshot.data['data'][index]['generic_name'] != null){
+                                  gName =snapshot.data['data'][index]['generic_name'];
+                                }else{
+                                  gName = "N/A";
+                                }
+                                if(snapshot.data['data'][index]['brand']['name'] != null){
+                                  brand =snapshot.data['data'][index]['brand']['name'];
+                                }else{
+                                  brand = "N/A";
+                                }
                                 return ListTile(
                                     leading: FadeInImage.memoryNetwork(
                                       placeholder: kTransparentImage,

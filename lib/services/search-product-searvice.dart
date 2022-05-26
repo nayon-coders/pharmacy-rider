@@ -25,11 +25,10 @@ class SearchProductByname{
       SearchAllData = jsonDecode(response.body.toString());
 
 
-     print(url);
       return SearchAllData;
 
     }else{
-      print(url);
+      print("some error");
     }
 
 

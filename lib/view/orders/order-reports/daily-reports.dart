@@ -12,6 +12,7 @@ import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-orders.da
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 import '../accpect-orders/accpect-orders.dart';
 import '../cancle/cancel-order-list.dart';
 import '../delivery-order/delivery-orders-list.dart';
@@ -186,23 +187,22 @@ class _DailyReportsState extends State<DailyReports> with TickerProviderStateMix
                                   Card(
                                     elevation: 2,
                                     child: Container(
-                                      color: Colors.blue,
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("Today Pending Order Amount",
+                                          Text("Today Pending Order: ",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                                color: customColor.pendingColor,
                                               fontWeight: FontWeight.w600,
-                                              fontSize: 15
+                                              fontSize: 10.sp
                                             ),
                                           ),
-                                          Text("${pendingPrice}",
+                                          Text("${pendingPrice} ৳",
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: customColor.pendingColor,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 16
+                                                fontSize: 12.sp
                                             ),
                                           ),
                                         ],
@@ -212,23 +212,23 @@ class _DailyReportsState extends State<DailyReports> with TickerProviderStateMix
                                   Card(
                                     elevation: 2,
                                     child: Container(
-                                      color: customColor.confirmColor,
+
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children:  [
-                                          Text("Today Accept Order Amount",
+                                          Text("Today Accept Order: ",
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.green.shade800,
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 15
+                                                fontSize: 10.sp
                                             ),
                                           ),
-                                          Text("${acceptPrice}",
+                                          Text("${acceptPrice} ৳",
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.green.shade800,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 16
+                                                fontSize: 12.sp
                                             ),
                                           ),
                                         ],
@@ -238,23 +238,23 @@ class _DailyReportsState extends State<DailyReports> with TickerProviderStateMix
                                   Card(
                                     elevation: 2,
                                     child: Container(
-                                      color: Colors.green,
+
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children:  [
-                                          Text("Today Delivered Order Amount",
+                                          Text("Today Delivered Order: ",
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.green,
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 15
+                                                fontSize: 10.sp
                                             ),
                                           ),
-                                          Text("${deliveredPrice}",
+                                          Text("${deliveredPrice} ৳",
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.green,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 16
+                                                fontSize: 12.sp
                                             ),
                                           ),
                                         ],
@@ -264,23 +264,23 @@ class _DailyReportsState extends State<DailyReports> with TickerProviderStateMix
                                   Card(
                                     elevation: 2,
                                     child: Container(
-                                      color: Colors.redAccent,
+
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children:  [
-                                          Text("Today Pending Order Amount",
+                                          Text("Today Cancel Order: ",
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.redAccent,
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 15
+                                                fontSize: 10.sp
                                             ),
                                           ),
-                                          Text("${cancelPrice}",
+                                          Text("${cancelPrice} ৳",
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.redAccent,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 16
+                                                fontSize: 12.sp
                                             ),
                                           ),
                                         ],

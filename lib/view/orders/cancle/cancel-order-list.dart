@@ -5,7 +5,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
 import 'package:pharmacy_rider_apps/services/orders.dart';
 import 'package:http/http.dart' as http;
+import 'package:pharmacy_rider_apps/view/orders/cancle/cancel-order-details.dart';
 import 'package:pharmacy_rider_apps/view/orders/delivery-order/delivery-order-details.dart';
+import 'package:sizer/sizer.dart';
 
 class CancelOrdersList extends StatefulWidget {
   const CancelOrdersList({Key? key}) : super(key: key);
@@ -34,23 +36,19 @@ class _CancelOrdersListState extends State<CancelOrdersList> {
             Expanded(child: FutureBuilder(
                 future: _allOrders.fromOrders(),
                 builder: (context, AsyncSnapshot<dynamic> snapshot){
-                  if(!snapshot.hasData){
-                    return Center(
-                      child: Text("No Cancel Data"),
-                    );
-                  }else if(snapshot.connectionState == ConnectionState.waiting){
+                  if(snapshot.connectionState == ConnectionState.waiting){
                     return Center(
                       child: SpinKitCircle(
                         color: customColor.primaryColor,
                         duration: Duration(seconds: 1),
                       ),
                     );
-                  }else{
-                    //show data;
+
+                  }else if(snapshot.hasData){
                     return ListView.builder(
                         itemCount: snapshot.data['data'].length,
                         itemBuilder: (context, index){
-                          if(snapshot.data['data'][index]['status'] == 'Cancel'){
+                          if(snapshot.data['data'][index]['status'] == 'Canceled'){
                             return OrderList(
                               orderId: snapshot.data['data'][index]['order_number '].toString(),
                               date: snapshot.data['data'][index]['date'].toString(),
@@ -64,6 +62,12 @@ class _CancelOrdersListState extends State<CancelOrdersList> {
                           }
                         }
                     );
+                  }else{
+                    return Center(
+                      child: Text("No Cancel Data"),
+                    );
+                    //show data;
+
                   }
 
                 }
@@ -96,19 +100,20 @@ class OrderList extends StatelessWidget {
                 Text("Order Id: ${orderId}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 10.sp,
                   ),
                 ),
                 Text("Date: $date",
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 10.sp,
 
                   ),
                 ),
                 Text("Status: ${status}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 10.sp,
+                    color: Colors.redAccent
                   ),
                 ),
               ],
@@ -116,7 +121,7 @@ class OrderList extends StatelessWidget {
             GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>DeliveryOrderDetails(OrderId: OrderId)));
+                    builder: (context)=>CanceledOrderDetails(OrderId: OrderId)));
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -127,7 +132,7 @@ class OrderList extends StatelessWidget {
                 child: Text("Details",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 15,
+                      fontSize: 10.sp,
                       fontWeight: FontWeight.w600
                   ),
                 ),

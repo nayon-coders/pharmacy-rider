@@ -4,6 +4,7 @@ import 'package:pharmacy_rider_apps/services/auth.dart';
 import 'package:pharmacy_rider_apps/view/auth/sign-in.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,13 +42,18 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        primaryColor: customColor.primaryColor,
-      ),
-      home: _isuserLogin ? const HomeScreen() : const SignIn(),
+    return Sizer(
+      builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            fontFamily: 'Poppins',
+            primaryColor: customColor.primaryColor,
+          ),
+          home: _isuserLogin ? const HomeScreen() : const SignIn(),
+        );
+      },
+
     );
   }
 }

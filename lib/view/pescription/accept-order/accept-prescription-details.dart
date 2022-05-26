@@ -22,6 +22,13 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
   TextEditingController _notes = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
     PrescriptionService _prescriptionService = PrescriptionService();
     return Scaffold(

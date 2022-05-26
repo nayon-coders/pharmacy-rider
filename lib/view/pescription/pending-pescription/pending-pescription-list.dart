@@ -29,19 +29,14 @@ class _PendingPescriotionListState extends State<PendingPescriotionList> {
                 child: FutureBuilder(
                   future: p_rescriptionService.formPrescriptionServiceList(),
                     builder: (context, AsyncSnapshot<dynamic> snapshot){
-                      if(!snapshot.hasData){
-                        return Center(
-                          child: Text("No Data Found"),
-                        );
-
-                      }else if(snapshot.connectionState == ConnectionState.waiting){
+                      if(snapshot.connectionState == ConnectionState.waiting){
                         return Center(
                           child: SpinKitCircle(
                             color: customColor.primaryColor,
                             duration: Duration(seconds: 1),
                           ),
                         );
-                      }else{
+                      }else if(snapshot.hasData ){
                         return ListView.builder(
                             itemCount: snapshot.data['data'].length,
                             itemBuilder: (context, index){
@@ -50,13 +45,15 @@ class _PendingPescriotionListState extends State<PendingPescriotionList> {
                                   PerscriptionID: "${snapshot.data['data'][index]['rq_code ']}",
                                   id: "${snapshot.data['data'][index]['id']}",
                                   status: '${snapshot.data['data'][index]['status']}',);
-                              }else{
-                                return Center();
                               }
+                              return Center();
                             }
 
                         );
-
+                      }else{
+                        return Center(
+                          child: Text("No Data Found"),
+                        );
                       }
                     }
                 ),

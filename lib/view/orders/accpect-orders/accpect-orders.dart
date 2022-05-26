@@ -9,6 +9,7 @@ import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-det
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:sizer/sizer.dart';
 
 class acpectOrders extends StatefulWidget {
   const acpectOrders({Key? key}) : super(key: key);
@@ -95,12 +96,12 @@ class OrderList extends StatelessWidget {
                 Text("Order Id: ${orderId}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 10.sp,
                   ),
                 ),
                 Text("Date: $date",
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 10.sp,
 
                   ),
                 )
@@ -120,7 +121,7 @@ class OrderList extends StatelessWidget {
                 child: Text("Details",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 15,
+                      fontSize: 10.sp,
                       fontWeight: FontWeight.w600
                   ),
                 ),

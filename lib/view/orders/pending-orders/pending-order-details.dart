@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
 import 'package:pharmacy_rider_apps/services/update-order-status-api.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
+import 'package:pharmacy_rider_apps/view/orders/order-details-controller.dart';
 import '../../../services/order-details.drart.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,9 +24,7 @@ class PendingOrderDetails extends StatefulWidget {
 }
 
 class _PendingOrderDetailsState extends State<PendingOrderDetails> {
-var totalAmount;
-var amount;
-var shipping;
+
 bool _isCancel = false;
 @override
   Widget build(BuildContext context) {
@@ -39,223 +38,7 @@ bool _isCancel = false;
         physics: ScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: FutureBuilder(
-              future: _orderService.fromOrdersDetails("${widget.OrderId}"),
-                builder: (context, AsyncSnapshot<dynamic> snapshot){
-                  if(snapshot.hasData){
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Order Id: ${snapshot.data['data']['order_number ']}",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ),
-                        Text("Date: ${snapshot.data['data']['date']}",
-                          style: const TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-
-                        //user information
-                        Container(
-                          margin: const EdgeInsets.only(top: 30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Center(
-                                child: Text("Customer Info",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10,),
-                              userInfo("Customer Name: ${snapshot.data['data']['name']}"),
-                              userInfo("Customer Email: ${snapshot.data['data']['email']}"),
-                              userInfo("Phone Number: ${snapshot.data['data']['phone']}"),
-                              userInfo("Customer Address: ${snapshot.data['data']['address']}"),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 30,),
-                        //product information
-                        const Center(
-                          child: Text("Product Info",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children:  [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 3,
-                              child: const Text("Name",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  )
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 5,
-                              child: const Center(
-                                child: Text("Price",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    )
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 5,
-                              child: const Center(
-                                child: Text("Quantity",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    )
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 5,
-                              child: const Center(
-                                child: Text("Total",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    )
-                                ),
-                              ),
-                            ),
-
-
-                          ],
-                        ),
-                        ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data['data']['order_products '].length,
-
-                            itemBuilder: (context,index){
-                              var productlist = snapshot.data['data']['order_products '][index];
-
-                              return  Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children:  [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width / 3,
-                                    child: Text(productlist['product_name'].toString(),
-                                        style: const TextStyle(
-                                          color: customColor.primaryColor,
-                                          fontSize: 18,
-                                        )
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width / 5,
-                                    child: Center(
-                                      child: Text(productlist['price'].toString(),
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width / 5,
-                                    child: Center(
-                                      child: Text(productlist['quantity'].toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18,
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width / 5,
-                                    child: Center(
-                                      child: Text(productlist['total'].toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18,
-                                          )
-                                      ),
-                                    ),
-                                  ),
-
-
-                                ],
-                              );
-                            }),
-
-                        Divider(color: Colors.grey, height: 2,),
-                        //total
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            const Text("Shipping:",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const SizedBox(width: 5,),
-                            Text(snapshot.data['data']['shipping'],
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children:  [
-                            const Text("Total Amount:",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const SizedBox(width: 5,),
-                            Text(snapshot.data['data']['amount'],
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-
-                  }else if(snapshot.connectionState == ConnectionState.waiting){
-                    return  const Padding(
-                      padding: EdgeInsets.only(top: 150),
-                      child: SpinKitCircle(
-                        color: customColor.primaryColor,
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  }else{
-                    return  const Padding(
-                      padding: EdgeInsets.only(top: 150),
-                      child: Center(child: Text("No Data Found")),
-                    );
-                  }
-                }
-            ),
+          child: orderDetails(OrderId: widget.OrderId),
           ),
       )
         : Center(
@@ -328,14 +111,7 @@ bool _isCancel = false;
 
   }
 
-  Widget userInfo(String? title){
-    return Text('${title}',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-            ),
-    );
-  }
+
 
 
 void _Cancel(String OrderId) async{

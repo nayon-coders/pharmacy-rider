@@ -26,7 +26,7 @@ class _SearchProductState extends State<SearchProduct> {
     SearchProductByname _searchProductByname = SearchProductByname();
     return Scaffold(
       appBar: AppBar(
-        title: Text("App Product"),
+        title: const Text("App Product"),
       ),
 
       body: Padding(
@@ -85,6 +85,7 @@ class _SearchProductState extends State<SearchProduct> {
                               String gName;
                               var images;
                               String name;
+                              String brand;
                               _qty.add(TextEditingController());
                               if(snapshot.data['data'][index]['product_images'][0]["file_path"] != null){
                                 images = snapshot.data['data'][index]['product_images'][0]["file_path"];
@@ -101,8 +102,12 @@ class _SearchProductState extends State<SearchProduct> {
                               }else{
                                  gName = "N/A";
                               }
+                              if(snapshot.data['data'][index]['brand']['name'] != null){
+                                brand =snapshot.data['data'][index]['brand']['name'];
+                              }else{
+                                brand = "N/A";
+                              }
 
-                              String brand = "";//snapshot.data['data'][index]['brand']['name'];
 
                               if(_searchByName.text.isNotEmpty){
                                 return ListTile(
@@ -183,6 +188,7 @@ class _SearchProductState extends State<SearchProduct> {
       var body = jsonDecode(response.body.toString());
       if(response.statusCode == 200){
         setState(() {
+          _qty[qty].clear();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Product added Success"),
             backgroundColor: Colors.green,));

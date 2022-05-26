@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 
 class CurrentTime extends StatelessWidget {
@@ -19,17 +20,17 @@ class CurrentTime extends StatelessWidget {
       child: DigitalClock(
         is24HourTimeFormat: false,
         digitAnimationStyle: Curves.bounceIn,
-        amPmDigitTextStyle: const TextStyle(
+        amPmDigitTextStyle:  TextStyle(
           color: Color(0xFFFF5630),
-          fontSize: 20,
+          fontSize: 17.sp,
           fontWeight: FontWeight.bold,
         ),
         areaDecoration: BoxDecoration(
           color: Colors.transparent,
         ),
-        hourMinuteDigitTextStyle: const TextStyle(
+        hourMinuteDigitTextStyle:  TextStyle(
           color: Color(0xFF051C4B),
-          fontSize: 35,
+          fontSize: 25.sp,
           fontWeight: FontWeight.bold,
 
         ),

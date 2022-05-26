@@ -5,6 +5,7 @@ import 'package:pharmacy_rider_apps/services/prescription-service.dart';
 import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
 import 'package:pharmacy_rider_apps/view/pescription/accept-order/accept-prescription-details.dart';
 import 'package:pharmacy_rider_apps/view/pescription/pending-pescription/pending-prescription-details.dart';
+import 'package:sizer/sizer.dart';
 
 class AcceptPrescriptionList extends StatefulWidget {
   const AcceptPrescriptionList({Key? key}) : super(key: key);
@@ -93,13 +94,14 @@ class PrescrptionList extends StatelessWidget {
                   Text("Id#: ${PerscriptionID}",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 13,
+                      fontSize: 10.sp,
                     ),
                   ),
 
                   Text("Status: $status",
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 10.sp,
+                      color: customColor.confirmColor
 
                     ),
                   )
@@ -120,7 +122,7 @@ class PrescrptionList extends StatelessWidget {
                 child: Text("Details",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 15,
+                      fontSize: 10.sp,
                       fontWeight: FontWeight.w600
                   ),
                 ),

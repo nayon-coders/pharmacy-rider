@@ -212,39 +212,63 @@ var userData;
 
   //clocking
   void _ClockingIn() async{
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Attendance'),
+        content: const Text('You want to check in?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async{
 
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    //Store Data
-    var token = localStorage.getString('token');
+              //
+              SharedPreferences localStorage = await SharedPreferences.getInstance();
+              //Store Data
+              var token = localStorage.getString('token');
 
-   // curentDate = dateFormat.format(date);
-  var response =  await http.post(
-    Uri.parse(ApiServise.AttendanceUpdate),
-    headers: {
-      'Accept' : 'application/json',
-      'Content-Type' : 'application/json',
-      'X-Header-Token' : 'base64:KWyE5YqjEnsf0L+9R7unn5QimC8eTW21sm1WalIA2+Y=',
-      'Authorization' : 'Bearer $token',
-    },
-  );
-  print(response.statusCode);
-  if(response.statusCode == 200){
-    setState(() {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("You are checking", ),
-            backgroundColor: Color(0xFF051C4B),
-          ));
-    });
-  }else{
-    setState(() {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("You are already in", ),
-            backgroundColor: Color(0xFF051C4B),
-          ));
-    });
-  }
+              // curentDate = dateFormat.format(date);
+              var response =  await http.post(
+                Uri.parse(ApiServise.AttendanceUpdate),
+                headers: {
+                  'Accept' : 'application/json',
+                  'Content-Type' : 'application/json',
+                  'X-Header-Token' : 'base64:KWyE5YqjEnsf0L+9R7unn5QimC8eTW21sm1WalIA2+Y=',
+                  'Authorization' : 'Bearer $token',
+                },
+              );
+              print(response.statusCode);
+              if(response.statusCode == 200){
+                setState(() {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Time in confirmed", ),
+                        backgroundColor: Color(0xFF051C4B),
+                      ));
+                });
+              }else{
+                setState(() {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("You are already in today", ),
+                        backgroundColor: Color(0xFF051C4B),
+                      ));
+                });
+              }
+
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+
+
 
 
   }
@@ -252,38 +276,61 @@ var userData;
 //clockout
   void _CheckOut() async{
 
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    //Store Data
-    var token = localStorage.getString('token');
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Attendance'),
+        content: const Text('You want to check out?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async{
+              SharedPreferences localStorage = await SharedPreferences.getInstance();
+              //Store Data
+              var token = localStorage.getString('token');
 
-    // curentDate = dateFormat.format(date);
-    var response =  await http.post(
-      Uri.parse(ApiServise.AttendanceUpdate),
-      headers: {
-        'Accept' : 'application/json',
-        'Content-Type' : 'application/json',
-        'X-Header-Token' : 'base64:KWyE5YqjEnsf0L+9R7unn5QimC8eTW21sm1WalIA2+Y=',
-        'Authorization' : 'Bearer $token',
-      },
+              // curentDate = dateFormat.format(date);
+              var response =  await http.post(
+                Uri.parse(ApiServise.AttendanceUpdate),
+                headers: {
+                  'Accept' : 'application/json',
+                  'Content-Type' : 'application/json',
+                  'X-Header-Token' : 'base64:KWyE5YqjEnsf0L+9R7unn5QimC8eTW21sm1WalIA2+Y=',
+                  'Authorization' : 'Bearer $token',
+                },
+              );
+              print(response.statusCode);
+              if(response.statusCode == 201){
+                setState(() {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Time Out confirmed", ),
+                        backgroundColor: Color(0xFFE63F31),
+                      ));
+                });
+              }else{
+                setState(() {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Your Attendance is complete for today.", ),
+                        backgroundColor: Color(0xFFE63F31),
+                      ));
+                });
+              }
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
-    print(response.statusCode);
-    if(response.statusCode == 200){
-      setState(() {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Check out success", ),
-              backgroundColor: Color(0xFFE63F31),
-            ));
-      });
-    }else{
-      setState(() {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("You are already in", ),
-              backgroundColor: Color(0xFFE63F31),
-            ));
-      });
-    }
+
+
+
 
   }
 }

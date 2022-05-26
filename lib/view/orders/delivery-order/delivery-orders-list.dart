@@ -7,6 +7,7 @@ import 'package:pharmacy_rider_apps/services/orders.dart';
 import 'package:pharmacy_rider_apps/view/orders/accpect-orders/accpect-order-details.dart';
 import 'package:http/http.dart' as http;
 import 'package:pharmacy_rider_apps/view/orders/delivery-order/delivery-order-details.dart';
+import 'package:sizer/sizer.dart';
 
 class DeliveryOrdersList extends StatefulWidget {
   const DeliveryOrdersList({Key? key}) : super(key: key);
@@ -107,19 +108,20 @@ class OrderList extends StatelessWidget {
                 Text("Order Id: ${orderId}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 10.sp,
                   ),
                 ),
                 Text("Date: $date",
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 10.sp,
 
                   ),
                 ),
                 Text("Status: ${status}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 10.sp,
+                    color: customColor.confirmColor
                   ),
                 ),
               ],
