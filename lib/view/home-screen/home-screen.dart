@@ -11,12 +11,13 @@ import 'package:pharmacy_rider_apps/view/auth/sign-in.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/widget/DashboardBox.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/widget/card-box-rows-widget-dart.dart';
 import 'package:pharmacy_rider_apps/view/orders/order-reports/orders-reports.dart';
-import 'package:pharmacy_rider_apps/view/pescription/accept-order/accept-prescription-list.dart';
 import 'package:pharmacy_rider_apps/view/pescription/cancel/calcel-prescription-list.dart';
 import 'package:pharmacy_rider_apps/view/pescription/pending-pescription/pending-pescription-list.dart';
+import 'package:pharmacy_rider_apps/view/pescription/processing-order/processing-prescription-list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../services/auth-useri.dart';
+import '../pescription/accept/accept-list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -289,7 +290,7 @@ void _UserInfo() async{
                             flex: 2,
                             child: GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> AcceptPrescriptionList()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> ProcessingPrescriptionList()));
                               },
                               child: FutureBuilder(
                                   future: _prescriptionService.formPrescriptionServiceList(),
@@ -297,16 +298,16 @@ void _UserInfo() async{
                                     if(snapshot.hasData){
                                       double length = 0;
                                       for(var i = 0; i<snapshot.data['data'].length; i ++ ){
-                                        if(snapshot.data['data'][i]['status'] == 'Confirmed'){
+                                        if(snapshot.data['data'][i]['status'] == 'Processing'){
                                           length += 1;
                                         }
                                       }
-                                      return DashboardBox(length.toInt(), "Accept", customColor.confirmColor);
+                                      return DashboardBox(length.toInt(), "Processing", customColor.processingColor);
                                     }else if(snapshot.connectionState == ConnectionState.waiting){
                                       return Center(child:
                                       SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
                                     }else{
-                                      return DashboardBox(0, "Accept", customColor.confirmColor);
+                                      return DashboardBox(0, "Processing", customColor.processingColor);
                                     }
 
                                   }
@@ -320,6 +321,35 @@ void _UserInfo() async{
                     Row(
                       children: [
 
+                        Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> AcceptPrescriptionList()));
+                              },
+                              child: FutureBuilder(
+                                  future: _prescriptionService.formPrescriptionServiceList(),
+                                  builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                    if(snapshot.hasData){
+                                      double length = 0;
+                                      for(var i = 0; i<snapshot.data['data'].length; i ++ ){
+                                        if(snapshot.data['data'][i]['status'] == 'Confirmed'){
+                                          length += 1;
+                                        }
+                                      }
+                                      return DashboardBox(length.toInt(), "Confirmed", customColor.confirmColor);
+                                    }else if(snapshot.connectionState == ConnectionState.waiting){
+                                      return Center(child:
+                                      SizedBox( width: 30, height: 30, child: CircularProgressIndicator()));
+                                    }else{
+                                      return DashboardBox(0, "Confirmed", customColor.confirmColor);
+                                    }
+
+                                  }
+                              ),
+                            )
+                        ),
+                        SizedBox(width: 10,),
                         Expanded(
                             flex: 1,
                             child: GestureDetector(

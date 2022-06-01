@@ -8,15 +8,15 @@ import 'package:pharmacy_rider_apps/services/prescription-service.dart';
 import 'package:pharmacy_rider_apps/view/home-screen/home-screen.dart';
 import 'package:pharmacy_rider_apps/view/pescription/add-product/add-product.dart';
 
-class AcceptPrescriptionDetails extends StatefulWidget {
+class ProcessingPrescriptionDetails extends StatefulWidget {
   final String id;
-  const AcceptPrescriptionDetails({Key? key, required this.id}) : super(key: key);
+  const ProcessingPrescriptionDetails({Key? key, required this.id}) : super(key: key);
 
   @override
-  _AcceptPrescriptionDetailsState createState() => _AcceptPrescriptionDetailsState();
+  _ProcessingPrescriptionDetailsState createState() => _ProcessingPrescriptionDetailsState();
 }
 
-class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
+class _ProcessingPrescriptionDetailsState extends State<ProcessingPrescriptionDetails> {
   bool _isLoding = false;
 
   TextEditingController _notes = TextEditingController();
@@ -33,7 +33,8 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
     PrescriptionService _prescriptionService = PrescriptionService();
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Files"),
+          title: const Text("Processing Prescription Files"),
+          backgroundColor: customColor.processingColor,
         ),
 
         body: Padding(
@@ -90,14 +91,41 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
               children: [
 
                 Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: FlatButton(
                       onPressed: (){
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
                             title: const Text('Are You Sure? '),
-                            content:   Text('Already added product. You Want to Add More Product.?'),
+                            content:   Text('Already added product. Is it complete?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: (){
+                                  _complete(widget.id);
+                                },
+                                child: const Text("Yes.! Complete"),
+                              )
+
+                            ],
+                          ),
+                        );
+
+                      },
+                      color: customColor.confirmColor,
+                      child: Text("Confirmed", style: TextStyle(color: Colors.white),),
+                    )
+                ),
+                SizedBox(width: 10,),
+                Expanded(
+                    flex: 1,
+                    child: FlatButton(
+                      onPressed: (){
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Are You Sure? '),
+                            content:   Text('You Want to Add More Product.?'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: (){
@@ -111,13 +139,10 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
                         );
 
                       },
-                      color: customColor.confirmColor,
+                      color: customColor.processingColor,
                       child: Text("Add Products", style: TextStyle(color: Colors.white),),
                     )
                 ),
-
-              
-
                 SizedBox(width: 10,),
 
               ],
@@ -128,8 +153,39 @@ class _AcceptPrescriptionDetailsState extends State<AcceptPrescriptionDetails> {
 
   }
 
-void _deletePrescription (id) async{
+void _complete (id) async{
+  setState(() {
+    _isLoding = true;
+  });
+  var Prescription = {
+    "status": "Confirmed",
+  };
 
+  var response = await UpdatePerscription().UpdatePerscriptionData(Prescription, id);
+  var body = jsonDecode(response.body.toString());
+  if(response.statusCode == 200){
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Prescription Confirmed.'),
+        content:  Text('${body['message']}'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+            },
+            child: Text("Ok"),
+          )
+
+        ],
+      ),
+    );
+  }else{
+    print("error");
+  }
+  setState(() {
+    _isLoding = false;
+  });
 }
 
 

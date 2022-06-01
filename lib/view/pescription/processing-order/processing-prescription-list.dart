@@ -2,26 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pharmacy_rider_apps/Utility/colors.dart';
 import 'package:pharmacy_rider_apps/services/prescription-service.dart';
-import 'package:pharmacy_rider_apps/view/orders/pending-orders/pending-order-details.dart';
-import 'package:pharmacy_rider_apps/view/pescription/accept-order/accept-prescription-details.dart';
-import 'package:pharmacy_rider_apps/view/pescription/pending-pescription/pending-prescription-details.dart';
+import 'package:pharmacy_rider_apps/view/pescription/processing-order/processing-prescription-details.dart';
 import 'package:sizer/sizer.dart';
 
-class AcceptPrescriptionList extends StatefulWidget {
-  const AcceptPrescriptionList({Key? key}) : super(key: key);
+class ProcessingPrescriptionList extends StatefulWidget {
+  const ProcessingPrescriptionList({Key? key}) : super(key: key);
 
   @override
-  _AcceptPrescriptionListState createState() => _AcceptPrescriptionListState();
+  _ProcessingPrescriptionListState createState() => _ProcessingPrescriptionListState();
 }
 
-class _AcceptPrescriptionListState extends State<AcceptPrescriptionList> {
+class _ProcessingPrescriptionListState extends State<ProcessingPrescriptionList> {
   @override
   Widget build(BuildContext context) {
     PrescriptionService _rescriptionService = PrescriptionService();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Accept Prescription"),
-        backgroundColor: Colors.green,
+        title: const Text("Processing Prescription"),
+        backgroundColor: customColor.processingColor,
       ),
 
       body: Padding(
@@ -36,7 +34,7 @@ class _AcceptPrescriptionListState extends State<AcceptPrescriptionList> {
                       return ListView.builder(
                           itemCount: snapshot.data['data'].length,
                           itemBuilder: (context, index){
-                            if(snapshot.data['data'][index]['status'] == 'Confirmed'){
+                            if(snapshot.data['data'][index]['status'] == 'Processing'){
                               return PrescrptionList(
                                 PerscriptionID: "${snapshot.data['data'][index]['rq_code ']}",
                                 id: "${snapshot.data['data'][index]['id']}",
@@ -101,7 +99,7 @@ class PrescrptionList extends StatelessWidget {
                   Text("Status: $status",
                     style: TextStyle(
                       fontSize: 10.sp,
-                      color: customColor.confirmColor
+                      color: customColor.processingColor
 
                     ),
                   )
@@ -111,13 +109,13 @@ class PrescrptionList extends StatelessWidget {
             GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>AcceptPrescriptionDetails( id: id,)));
+                    builder: (context)=>ProcessingPrescriptionDetails( id: id,)));
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: customColor.confirmColor,
+                  color: customColor.processingColor,
                 ),
                 child: Text("Details",
                   style: TextStyle(

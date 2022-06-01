@@ -176,13 +176,12 @@ class _PendingPescriptionDetailsState extends State<PendingPescriptionDetails> {
       _isLoding = true;
     });
     var Prescription = {
-      "status": "Confirmed",
+      "status": "Processing",
     };
 
     var response = await UpdatePerscription().UpdatePerscriptionData(Prescription, PID);
     var body = jsonDecode(response.body.toString());
     if(response.statusCode == 200){
-      print("succes Confiremd");
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
