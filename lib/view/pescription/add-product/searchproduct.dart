@@ -39,6 +39,7 @@ class _SearchProductState extends State<SearchProduct> {
               children: [
                 Expanded(
                   child: TextFormField(
+
                     onChanged: (value){
                       setState(() {
 
@@ -51,7 +52,8 @@ class _SearchProductState extends State<SearchProduct> {
                         border: OutlineInputBorder(
                           borderSide: BorderSide(width: 1,),
                         ),
-                        prefixIcon: Icon(Icons.shopping_cart)
+                        prefixIcon: Icon(Icons.shopping_cart),
+
                     ),
                   ),
                 ),
@@ -80,7 +82,7 @@ class _SearchProductState extends State<SearchProduct> {
                     builder: (context, AsyncSnapshot<dynamic> snapshot){
                       if(snapshot.hasData){
                         return ListView.builder(
-                            itemCount: snapshot.data['data'].length,
+                            itemCount: 5,
                             itemBuilder: (context, index){
                               String gName;
                               var images;
@@ -122,6 +124,7 @@ class _SearchProductState extends State<SearchProduct> {
                                         Text("Generic name: $gName" ),
                                         Text("Brand: $brand"),
                                         TextFormField(
+                                          keyboardType: TextInputType.number,
                                           controller: _qty[index],
                                           decoration: const InputDecoration(
                                             contentPadding: EdgeInsets.only(left: 10),
@@ -144,6 +147,8 @@ class _SearchProductState extends State<SearchProduct> {
                                       ),
                                     )
                                 );
+                              }else{
+                                return Center();
                               }
 
 

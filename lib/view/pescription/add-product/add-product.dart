@@ -62,7 +62,7 @@ class _AddproductState extends State<Addproduct> {
                     builder: (context, AsyncSnapshot<dynamic> snapshot){
                       if(snapshot.hasData){
                           return ListView.builder(
-                              itemCount: snapshot.data['data'].length,
+                              itemCount: 10,
                               itemBuilder: (context, index){
                                 _qty.add(new TextEditingController());
                                 String gName;
